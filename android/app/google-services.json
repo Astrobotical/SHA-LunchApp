@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "773520984019",
+    "project_id": "hts-lunchapp",
+    "storage_bucket": "hts-lunchapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773520984019:android:a0120ae7b5a165870b5126",
+        "android_client_info": {
+          "package_name": "com.romarioburke.HLa.hla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773520984019-v93p8uj5gbfkiuqgdihg3mcq52g56nqi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.romarioburke.HLa.hla",
+            "certificate_hash": "cf507a6199e022b0b7b7b61565923893cf0ae3ae"
+          }
+        },
+        {
+          "client_id": "773520984019-qdbngcalirpa682ataeeurt73048jadt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzHnYTwbgFYkhcSO628PuWM77W-Tv5mTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773520984019-qdbngcalirpa682ataeeurt73048jadt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "773520984019-c28modlbcj8heki4aeelr4p20rodlc7n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.romarioburke.HLa.hla"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
