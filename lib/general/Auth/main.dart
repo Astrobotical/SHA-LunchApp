@@ -4,6 +4,7 @@ import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
 import 'package:hla/StateData/bloc/Authentication/auth_state.dart';
 import 'package:hla/general/Auth/login.dart';
 import 'package:hla/general/Auth/signup.dart';
+import 'package:hla/general/routes.dart';
 class MainAuth extends StatefulWidget{
   const MainAuth({super.key});
 
@@ -20,9 +21,10 @@ class _MainAuthState extends State<MainAuth> {
       home:BlocProvider(
         create: (context) => AuthCubit()..init(),
         child: Scaffold(
-            body: const TabArea(),
+            body: TabArea(),
       ),
-      )
+      ),
+      onGenerateRoute:  RoutesGenerator,
     );
   }
 }

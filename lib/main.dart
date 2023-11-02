@@ -13,13 +13,17 @@ import 'package:http/http.dart' as http;
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hla/general/Parent.dart';
+import 'package:hla/placeholder.dart';
+import 'package:hla/cooks/addMenuItem.dart';
+import 'package:hla/cooks/menuCounter.dart';
+import 'package:hla/cooks/invoiceRequestor.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(Parent());
+  runApp(InvoiceRequestor());
   //Bloc.observer = CubitObserver();
 }
 

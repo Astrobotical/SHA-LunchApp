@@ -5,7 +5,6 @@ import 'package:progress_state_button/progress_button.dart';
 import 'package:gap/gap.dart';
 class Signup extends StatelessWidget {
   const Signup({super.key});
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

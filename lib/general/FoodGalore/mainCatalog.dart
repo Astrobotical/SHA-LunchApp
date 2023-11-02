@@ -34,7 +34,7 @@ class _FoodCatalogState extends State<FoodCatalog>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [Container(
-              margin: EdgeInsets.only(top: 5, bottom: 20),
+              margin: EdgeInsets.only( bottom: 20),
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
                 child: Row(
@@ -42,7 +42,7 @@ class _FoodCatalogState extends State<FoodCatalog>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 30),
+                        margin: EdgeInsets.only(top: 10),
                         child: const Text(
                         'Food Catalog',
                         style: TextStyle(
@@ -102,17 +102,10 @@ class _FoodCatalogState extends State<FoodCatalog>
               children: [
                 // Fruits tab page
                  SwipeTo(onRightSwipe: () {
-                  ArtSweetAlert.show(
-                      context: context,
-                      artDialogArgs: ArtDialogArgs(
-                        type: ArtSweetAlertType.success,
-                        title: "Item Selected",
-                        text: "Food item was selected",
+                  ArtSweetAlert.show(context: context,artDialogArgs: ArtDialogArgs(type: ArtSweetAlertType.success,title: "Item Selected",
                       ),
                     );
       },
-      iconOnRightSwipe: Icons.arrow_right_alt_rounded,
-      rightSwipeWidget: const Text("Item Selected"),
       child: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
         child: Container(
