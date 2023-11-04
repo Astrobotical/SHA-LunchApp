@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hla/general/Settings/cooksSettings.dart';
@@ -12,7 +13,13 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
-    bool isStudent = false;
+    bool isStudent = true;
+    String? Username;
+    String? Email;
+    if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
+      Username = FirebaseAuth.instance.currentUser!.displayName;
+      Email = FirebaseAuth.instance.currentUser!.email;
+    }
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,8 +29,7 @@ class _SettingsState extends State<Settings> {
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              boxShadow: [
-              ],
+              boxShadow: [],
             ),
             child: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
@@ -46,7 +52,7 @@ class _SettingsState extends State<Settings> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: Image.network(
-                          "https://img.freepik.com/free-vector/detailed-chef-logo-template_23-2148987940.jpg?w=2000",
+                          "https://ui-avatars.com/api/?name=${Username}",
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
                           fit: BoxFit.cover,
@@ -61,20 +67,18 @@ class _SettingsState extends State<Settings> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Midget Unleashed',
+                        Text("$Username",
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                                color: Colors.white
-                            )),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                          child: Text('Deeznutz@kitchen.com',
+                          child: Text('$Email',
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                  color: Colors.white
-                              )),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
                         ),
                       ],
                     ),

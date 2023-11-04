@@ -1,6 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
 import 'package:hla/general/Auth/main.dart';
 import 'package:hla/general/routes.dart';
 import 'package:hla/general/settings.dart';
@@ -19,10 +21,7 @@ class Parent extends StatefulWidget {
 class _ParentState extends State<Parent> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: ParentBody(),
-        onGenerateRoute: RoutesGenerator);
+    return const ParentBody();
   }
 }
 
@@ -50,11 +49,13 @@ class _ParentBodyState extends State<ParentBody> {
     const Text("Logout"),
   ];
   int currentIndex = 0;
-  bool isStudent = false;
+  bool isStudent = true;
   bool isCartEmpty = true;
   MaterialColor BGC = Colors.green;
+
   @override
   Widget build(BuildContext context) {
+    final Cubitobj = context.read<AuthCubit>();
     return Scaffold(
         backgroundColor: BGC,
         body: SingleChildScrollView(
@@ -142,6 +143,7 @@ class _ParentBodyState extends State<ParentBody> {
                         currentIndex = 4;
                       });
                       print("Logout");
+                      Cubitobj.googleLogout();
                       Navigator.pushReplacementNamed(context, '/Auth');
                       break;
                   }
@@ -191,6 +193,7 @@ class _ParentBodyState extends State<ParentBody> {
                         currentIndex = 4;
                       });
                       print("Logout");
+                      Cubitobj.googleLogout();
                       Navigator.pushReplacementNamed(context, '/Auth');
                       break;
                   }

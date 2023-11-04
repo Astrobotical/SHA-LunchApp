@@ -20,15 +20,20 @@ class StudentSettings extends StatelessWidget {
             ),
           ),
         ),
+        InkWell(
+          onTap: (){
+  Navigator.pushReplacementNamed(context, '/foodstatus');
+          },
+          child:
         Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
           child: Container(
             width: double.infinity,
             height: 60,
             decoration: BoxDecoration(
-            
               boxShadow: const[
-BoxShadow(                  color: Colors.white
+              BoxShadow(
+                 color: Colors.white
                 )
               ],
               borderRadius: BorderRadius.circular(12),
@@ -64,18 +69,22 @@ BoxShadow(                  color: Colors.white
             ),
           ),
         ),
+        ),
+        InkWell(
+          onTap: () {
+  Navigator.pushReplacementNamed(context, '/qrcodescanner');
+          },
+          child:
         Padding(
           padding:const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
           child: Container(
             width: double.infinity,
             height: 60,
             decoration: BoxDecoration(
-            
               boxShadow: const[
-BoxShadow(                  color: Colors.white,
-
-
-offset: Offset(0, 2),
+                BoxShadow(
+                  color: Colors.white,
+                  offset: Offset(0, 2),
                 )
               ],
               borderRadius: BorderRadius.circular(12),
@@ -116,6 +125,12 @@ offset: Offset(0, 2),
             ),
           ),
         ),
+        ),
+        InkWell(
+          onTap: () {
+            
+          },
+          child:
         Padding(
           padding:const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
           child: Container(
@@ -165,6 +180,12 @@ BoxShadow(                  color: Colors.white
             ),
           ),
         ),
+        ),
+        InkWell(
+          onTap: (){
+
+          },
+          child:
         Padding(
           padding:const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
           child: Container(
@@ -186,7 +207,7 @@ BoxShadow(                  color: Colors.white,
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Icon(
-                    Icons.account_circle_outlined,
+                    Icons.reviews_outlined,
                    color: Colors.blue,
                     size: 24,
                   ),
@@ -194,7 +215,7 @@ BoxShadow(                  color: Colors.white,
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
                       child: Text(
-                        'Edit Profile',
+                        'Review App',
                           style: TextStyle(
                           fontSize: 20,
                               color:Colors.blue
@@ -215,6 +236,7 @@ BoxShadow(                  color: Colors.white,
             ),
           ),
         ),
+        ),
         const Padding(
           padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
           child: Text(
@@ -226,18 +248,21 @@ BoxShadow(                  color: Colors.white,
             ),
           ),
         ),
+        InkWell(
+          onTap : (){
+            Navigator.pushReplacementNamed(context, '/support');
+          },
+          child:
         Padding(
           padding:const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
           child: Container(
             width: double.infinity,
             height: 60,
             decoration: BoxDecoration(
-            
               boxShadow: const[
-BoxShadow(                  color: Colors.white,
-
-
-offset: Offset(0, 2),
+                BoxShadow(                 
+                  color: Colors.white,
+                  offset: Offset(0, 2),
                 )
               ],
               borderRadius: BorderRadius.circular(12),
@@ -274,6 +299,7 @@ offset: Offset(0, 2),
               ),
             ),
           ),
+        ),
         ),
         Padding(
           padding:const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),

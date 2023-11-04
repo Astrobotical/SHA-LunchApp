@@ -20,7 +20,7 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
               elevation: 0,
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/');
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,
@@ -42,6 +42,9 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
             body: 
             SingleChildScrollView(
               child:
+                  FittedBox(
+                  fit:BoxFit.fitWidth,
+                  child:
             Column(
               children: [
                 Container(
@@ -49,6 +52,9 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
                   child:  Text("Menu for the date: ${now.day}/${now.month}/${now.year}", style: TextStyle(fontSize: 30,color :Colors.white),)
                 
                 ),
+                FittedBox(
+                  fit:BoxFit.fitWidth,
+                  child:
                 Container(
                   margin: const EdgeInsets.only(top: 10, bottom: 20),
                   child: Center(
@@ -142,6 +148,10 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
                     ),
                   ),
                 ),
+                ),
+                FittedBox(
+                  fit:BoxFit.fitWidth,
+                  child:
                 Container(
                   margin: const EdgeInsets.only(top: 10, bottom: 20),
                   child: Center(
@@ -219,6 +229,7 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
+                              
                               Text(
                                 'Status: DS',
                                 style: TextStyle(
@@ -235,9 +246,11 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
                     ),
                   ),
                 ),
+                ),
               Gap(20),
               Text("Status Code Meanings", style: TextStyle(fontSize: 20,color :Colors.white)),
               Gap(10),
+          
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -248,9 +261,10 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
               Text("DS: Menu item was Digitally Signed", style: TextStyle(fontSize: 20,color :Colors.white)),
               ],
             ),
+
               ],
             ),
       )
-    ));
+    )));
   }
 }

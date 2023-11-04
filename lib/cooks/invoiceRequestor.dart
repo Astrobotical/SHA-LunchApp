@@ -16,11 +16,11 @@ class _InvoiceRequestorState extends State<InvoiceRequestor> {
       home: Scaffold(
         backgroundColor: Colors.blue,
         appBar: AppBar(
-  backgroundColor: Colors.blue,
-  automaticallyImplyLeading: false,
-  leading: IconButton(
+          backgroundColor: Colors.blue,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                   Navigator.pushNamed(context, '/');
                 },
     icon: Icon(
       Icons.arrow_back_rounded,
@@ -153,9 +153,9 @@ class _InvoiceRequestorState extends State<InvoiceRequestor> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 12),
                                   child: Text(
-                                    '\$1.50',
+                                    'Completed',
                                     textAlign: TextAlign.end,
-                                    style: TextStyle(fontSize: 18)
+                                    style: TextStyle(fontSize: 18,color: Colors.green)
                                   ),
                                 ),
                                 Padding(
@@ -289,9 +289,9 @@ class _InvoiceRequestorState extends State<InvoiceRequestor> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 12),
                                   child: Text(
-                                    '\$1.50',
+                                    'Completed',
                                     textAlign: TextAlign.end,
-                                    style: TextStyle(fontSize: 18)
+                                    style: TextStyle(fontSize: 18,color: Colors.green)
                                   ),
                                 ),
                                 Padding(
@@ -425,9 +425,9 @@ class _InvoiceRequestorState extends State<InvoiceRequestor> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 12),
                                   child: Text(
-                                    '\$1.50',
+                                    'Completed',
                                     textAlign: TextAlign.end,
-                                    style: TextStyle(fontSize: 18)
+                                    style: TextStyle(fontSize: 18,color: Colors.green)
                                   ),
                                 ),
                                 Padding(
@@ -562,9 +562,9 @@ class _InvoiceRequestorState extends State<InvoiceRequestor> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 12),
                                   child: Text(
-                                    '\$1.50',
+                                    'Completed',
                                     textAlign: TextAlign.end,
-                                    style: TextStyle(fontSize: 18)
+                                    style: TextStyle(fontSize: 18,color: Colors.green)
                                   ),
                                 ),
                                 Padding(

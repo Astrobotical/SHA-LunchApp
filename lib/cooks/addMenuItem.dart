@@ -15,15 +15,13 @@ class _AdditemWidgetState extends State<AdditemWidget> {
   String MealType = 'Select Meal Type';
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 0,
               leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: ()  {
+                 Navigator.pushNamed(context, '/');
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,
@@ -93,6 +91,9 @@ class _AdditemWidgetState extends State<AdditemWidget> {
                         )
                       ],
                     ))),
+                     FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child:
                 Row(children: [
                   Container(
                       margin: const EdgeInsets.only(left: 30, right: 50),
@@ -101,6 +102,7 @@ class _AdditemWidgetState extends State<AdditemWidget> {
                         "Meal Category",
                         style: TextStyle(fontSize: 20),
                       )),
+                     
                   DropdownButton<String>(
                       value: Category,
                       icon: const Icon(Icons.arrow_downward),
@@ -123,8 +125,12 @@ class _AdditemWidgetState extends State<AdditemWidget> {
                           child: Text(value),
                         );
                       }).toList())
-                ]),
+                      
+                ])),
                 Gap(30),
+                FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child:
                 Row(children: [
                   Container(
                       margin: const EdgeInsets.only(left: 30, right: 50),
@@ -154,8 +160,11 @@ class _AdditemWidgetState extends State<AdditemWidget> {
                           child: Text(value),
                         );
                       }).toList())
-                ]),
+                ])),
                 Gap(30),
+                FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child:
                 Row(children: [
                   Container(
                       margin: const EdgeInsets.only(left: 30, right: 50),
@@ -185,7 +194,7 @@ class _AdditemWidgetState extends State<AdditemWidget> {
                           child: Text(value),
                         );
                       }).toList())
-                ]),
+                ])),
                 Gap(30),
                 ElevatedButton(
                     onPressed: () {},
@@ -194,6 +203,6 @@ class _AdditemWidgetState extends State<AdditemWidget> {
                       style: TextStyle(fontSize: 20),
                     ))
               ],
-            ))));
+            )));
   }
 }

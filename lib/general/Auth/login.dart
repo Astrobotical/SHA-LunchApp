@@ -7,8 +7,6 @@ import 'package:hla/general/Auth/signup.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../StateData/bloc/Authentication/auth_state.dart';
-
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
 
@@ -18,7 +16,7 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   late AuthCubit CurrentContext;
-
+  ButtonState? changedstate = ButtonState.idle;
   @override
   void initState() {
     super.initState();
@@ -28,13 +26,20 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   Widget build(BuildContext context) {
     final Cubitobj = context.read<AuthCubit>();
-    ButtonState? changedstate;
+
     return SingleChildScrollView(
-        child: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+        child:
+            BlocConsumer<AuthCubit, AuthState>(listener: (context, snapshot) {
+      if (changedstate != snapshot.ButtionState) {
+        setState(() {
+          changedstate = snapshot.ButtionState;
+        });
+      }
+    }, builder: (context, state) {
       return Align(
           alignment: AlignmentDirectional(0.00, -1.00),
           child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(24, 16, 24, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 24, 0),
               child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +75,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 16),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 16),
                       child: TextFormField(
                         //controller: _model.emailAddressController,
                         textCapitalization: TextCapitalization.sentences,
@@ -199,51 +205,50 @@ class _LoginWidgetState extends State<LoginWidget> {
                       .asValidator(context), */
                       ),
                     ),
-                     Align(
-                            alignment: AlignmentDirectional(0.00, 0.00),
-                            child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
-                                child: ProgressButton.icon(
-                                    iconedButtons: {
-                                      ButtonState.idle: IconedButton(
-                                          text: "Send",
-                                          icon: Icon(Icons.send,
-                                              color: Colors.white),
-                                          color: Colors.deepPurple.shade500),
-                                      ButtonState.loading: IconedButton(
-                                          text: "Loading",
-                                          color: Colors.deepPurple.shade700),
-                                      ButtonState.fail: IconedButton(
-                                          text: "Failed",
-                                          icon: Icon(Icons.cancel,
-                                              color: Colors.white),
-                                          color: Colors.red.shade300),
-                                      ButtonState.success: IconedButton(
-                                          text: "",
-                                          icon: Icon(
-                                            Icons.check_circle,
-                                            color: Colors.white,
-                                          ),
-                                          color: Colors.green.shade400)
-                                    },
-                                    onPressed: ()  {
-                                      CurrentContext.stateprogress();
-                                     /* await Future.delayed(
+                    Align(
+                      alignment: AlignmentDirectional(0.00, 0.00),
+                      child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+                          child: BlocBuilder<AuthCubit, AuthState>(
+                              builder: (context, state) {
+                            return ProgressButton.icon(
+                                iconedButtons: {
+                                  ButtonState.idle: IconedButton(
+                                      text: "Send",
+                                      icon:
+                                          Icon(Icons.send, color: Colors.white),
+                                      color: Colors.deepPurple.shade500),
+                                  ButtonState.loading: IconedButton(
+                                      text: "Loading",
+                                      color: Colors.deepPurple.shade700),
+                                  ButtonState.fail: IconedButton(
+                                      text: "Failed",
+                                      icon: Icon(Icons.cancel,
+                                          color: Colors.white),
+                                      color: Colors.red.shade300),
+                                  ButtonState.success: IconedButton(
+                                      text: "",
+                                      icon: Icon(
+                                        Icons.check_circle,
+                                        color: Colors.white,
+                                      ),
+                                      color: Colors.green.shade400)
+                                },
+                                onPressed: () {
+                                  Cubitobj.stateprogress;
+                                  //CurrentContext.stateprogress();
+                                  /* await Future.delayed(
                                           const Duration(seconds: 2), () {
                                         CurrentContext.statesucess();
                                       });
                                       */
-                                     //Navigator.pushReplacementNamed(context, '/');
-                                                                              
-                                    print("Clicked 123");
-                                    },
+                                  // Navigator.pushReplacementNamed(context, '/');
 
-                                    state:
-                                        state.ButtionState as ButtonState?)
-                                        )
-                     ),
-                
+                                  print("${changedstate}");
+                                },
+                                state: changedstate);
+                          })),
+                    ),
                     Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -293,106 +298,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                             ))
                           ],
                         ),
-                        /*
-                          Align(
-                            alignment: AlignmentDirectional(0.00, 0.00),
-                            child: Wrap(
-                              spacing: 16,
-                              runSpacing: 0,
-                              alignment: WrapAlignment.center,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              direction: Axis.horizontal,
-                              runAlignment: WrapAlignment.center,
-                              verticalDirection: VerticalDirection.down,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 16),
-                                  child: Container(
-                                    width: 230,
-                                    height: 44,
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 0, 0),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Color(0xFFE0E3E7),
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(40),
-
-                                      color: Colors.white,
-                                    ),
-                                    child: const Align(
-                                      child: Wrap(
-                                        alignment: WrapAlignment.spaceAround,
-                                        crossAxisAlignment: WrapCrossAlignment
-                                            .center,
-                                        children: [
-                                          FaIcon(
-                                              FontAwesomeIcons.google,
-                                              size: 20,
-                                              color: Colors.black
-                                          ),
-                                          Center(child: Text(
-                                              'Continue with Google',
-                                              style: TextStyle(
-                                                fontFamily: 'Plus Jakarta Sans',
-                                                color: Color(0xFF101213),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                              )))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 16),
-                                  child: Container(
-                                      width: 230,
-                                      height: 44,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 0),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Color(0xFFE0E3E7),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(40),
-
-                                        color: Colors.white,
-                                      ),
-                                      child: const Align(
-
-                                        child: Wrap(
-                                          alignment: WrapAlignment.spaceAround,
-                                          crossAxisAlignment: WrapCrossAlignment
-                                              .center,
-                                          children: [
-
-                                            FaIcon(
-                                              FontAwesomeIcons.apple,
-                                              size: 20,
-                                              color: Colors.black,
-                                            ),
-                                            Center(
-                                              child: Text('Continue with Apple',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Plus Jakarta Sans',
-                                                    color: Color(0xFF101213),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            )
-                                          ],
-                                        ),)),
-                                ),
-                              ],
-                            ),
-                          ),
-                          */
                         InkWell(
                             onTap: () {},
                             child: Container(

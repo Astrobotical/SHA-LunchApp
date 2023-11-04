@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:hla/StateData/bloc/Authentication/auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:progress_state_button/progress_button.dart';
+part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthState(ButtionState: ButtonState.idle));
@@ -13,20 +13,27 @@ class AuthCubit extends Cubit<AuthState> {
   final googlesignIn = GoogleSignIn();
   GoogleSignInAccount? CurrentGoogleUser;
   GoogleSignInAccount get user => CurrentGoogleUser!;
+
   Future googleLogin() async {
     final googleUser = await googlesignIn.signIn();
+
     if (googleUser == null) return;
     CurrentGoogleUser = googleUser;
     final googleAuth = await googleUser.authentication;
-    final Creds = GoogleAuthProvider.credential(
+    // Creating a new Credential
+    final creds = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    await FirebaseAuth.instance.signInWithCredential(Creds);
+    return await FirebaseAuth.instance.signInWithCredential(creds);
+  }
+
+  Future googleLogout() async {
+    FirebaseAuth.instance.signOut();
   }
 
   late final StreamSubscription<ButtonState> buttonStateSubscription;
- /* StreamSubscription<ButtonState> _State() {
+  /* StreamSubscription<ButtonState> _State() {
     return buttonStateSubscription =
         buttonState.stream.listen((ButtonState event) {
       if (event == ButtonState.idle) {
@@ -57,16 +64,19 @@ class AuthCubit extends Cubit<AuthState> {
     stateprogress();
   }
 
-  void statesucess() {
-    buttonState.add(ButtonState.success);
+ Future <void> statesucess() async {
+    emit(AuthState(ButtionState: state.ButtionState = ButtonState.success));
   }
 
-  void stateprogress() {
-    buttonState.add(ButtonState.loading);
+ Future<void> stateprogress() async {
+    emit(AuthState(ButtionState: state.ButtionState = ButtonState.loading));
+    await Future.delayed(const Duration(seconds: 2), () {
+      statesucess();
+    });
   }
 
   void statefail() {
-    buttonState.add(ButtonState.fail);
+    emit(AuthState(ButtionState: state.ButtionState = ButtonState.fail));
   }
 
   void stateidle() {

@@ -1,16 +1,13 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
-import 'package:progress_state_button/progress_button.dart';
+part of 'auth_cubit.dart';
 
-enum BtnState { idle, loading, success, fail }
-class AuthState extends Equatable {
-  ButtonState? ButtionState;
+class AuthState {
+  ButtonState ButtionState;
   AuthState({required this.ButtionState});
-  @override
-  List<Object?> get props => [];
 }
 /*
 class AuthInitial extends AuthState {
+  AuthInitial({required super.ButtionState});
+
   @override
   bool operator ==(Object other) => false;
 }
