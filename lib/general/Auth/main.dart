@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +27,7 @@ class _MainAuthState extends State<MainAuth> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        create: (context) => AuthCubit()..init(),
+        create: (context) => AuthCubit()..initialize(),
         child: Scaffold(
           body: TabArea(),
         ),
@@ -61,17 +64,11 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final Cubitobj = context.read<AuthCubit>();
+    bool loading = false;
+    bool done = false;
+    bool isVisible = false;
     return Scaffold(
         body: Column(children: [
-      StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, snapshot) {
-            if (snapshot.hasData) {
-               WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.push(context,MaterialPageRoute(builder: (context) => Parent()));});
-            }
-            return Text("");
-          }),
       Container(
         height: 200,
         child: Card(
@@ -106,317 +103,389 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
         children: <Widget>[
           Card(
               margin: EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                  child: Align(
-                      alignment: AlignmentDirectional(0.00, -1.00),
-                      child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              24, 16, 24, 0),
-                          child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 230,
-                                  height: 16,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
+              child: BlocConsumer<AuthCubit, AuthState>(
+                  listener: (context, snapshot) {
+                if (snapshot is AuthLoading) {
+                  
+                }
+                if (snapshot is AuthSuccessState) {
+                  setState(() {
+                    loading = false;
+                    done = true;
+                    });
+                }
+              }, builder: (context, state) {
+                if (state.ButtionState == ButtonState.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if(state.ButtionState == ButtonState.success)
+                {
+                  Future.delayed(const Duration(seconds: 4));
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Parent()));
+                      });
+                }
+                return SingleChildScrollView(
+                    child: Align(
+                        alignment: AlignmentDirectional(0.00, -1.00),
+                        child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                24, 16, 24, 0),
+                            child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 230,
+                                    height: 16,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                const Text(
-                                  'Welcome Back',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    color: Color(0xFF101213),
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 4, 0, 24),
-                                  child: Text(
-                                    'Fill out the information below in order to access your account.',
+                                  const Text(
+                                    'Welcome Back',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                       fontFamily: 'Plus Jakarta Sans',
-                                      color: Color(0xFF57636C),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      8, 0, 8, 16),
-                                  child: TextFormField(
-                                    //controller: _model.emailAddressController,
-                                    textCapitalization:
-                                        TextCapitalization.sentences,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'StudentID or Email',
-                                      labelStyle: TextStyle(
-                                        fontFamily: 'Plus Jakarta Sans',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      hintStyle: const TextStyle(
-                                        fontFamily: 'Plus Jakarta Sans',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFE0E3E7),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFF4B39EF),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFFF5963),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFFF5963),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      filled: true,
-                                      fillColor: Color(0xCCFFFFFF),
-                                    ),
-                                    style: const TextStyle(
-                                      fontFamily: 'Plus Jakarta Sans',
                                       color: Color(0xFF101213),
-                                      fontSize: 14,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.w500,
                                     ),
-                                    /* validator: _model.emailAddressControllerValidator
-                      .asValidator(context), */
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      8, 0, 8, 16),
-                                  child: TextFormField(
-                                    //  controller: _model.passwordController,
-                                    textCapitalization:
-                                        TextCapitalization.sentences,
-                                    //  obscureText: !_model.passwordVisibility,
-                                    decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      labelStyle: const TextStyle(
+                                  const Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 4, 0, 24),
+                                    child: Text(
+                                      'Fill out the information below in order to access your account.',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
                                         color: Color(0xFF57636C),
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
-                                      hintStyle: const TextStyle(
-                                        fontFamily: 'Plus Jakarta Sans',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFE0E3E7),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFF4B39EF),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFFF5963),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFFF5963),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      filled: true,
-                                      fillColor: Color(0xCCFFFFFF),
-                                      suffixIcon: InkWell(
-                                        focusNode:
-                                            FocusNode(skipTraversal: true),
-                                        child: Icon(
-                                          Icons.visibility_outlined,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                            8, 0, 8, 16),
+                                    child: TextFormField(
+                                      controller: Cubitobj.EmailBox,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'StudentID',
+                                        labelStyle: TextStyle(
+                                          fontFamily: 'Plus Jakarta Sans',
                                           color: Color(0xFF57636C),
-                                          size: 20,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
                                         ),
+                                        hintStyle: const TextStyle(
+                                          fontFamily: 'Plus Jakarta Sans',
+                                          color: Color(0xFF57636C),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFE0E3E7),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFF4B39EF),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFFF5963),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFFF5963),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        filled: true,
+                                        fillColor: Color(0xCCFFFFFF),
                                       ),
-                                    ),
-                                    style: const TextStyle(
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      color: Color(0xFF101213),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    /* validator: _model.passwordControllerValidator
+                                      style: const TextStyle(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        color: Color(0xFF101213),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      /* validator: _model.emailAddressControllerValidator
                       .asValidator(context), */
+                                    ),
                                   ),
-                                ),
-                                BlocBuilder<AuthCubit, AuthState>(
-                                    builder: (context, state) {
-                                  if (state.ButtionState ==
-                                      ButtonState.success) {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Parent()));
-                                    });
-                                  }
-                                  return Align(
-                                      alignment:
-                                          AlignmentDirectional(0.00, 0.00),
-                                      child: Padding(
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        8, 0, 8, 16),
+                                    child: TextFormField(
+                                      controller: Cubitobj.Password,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      //  obscureText: !_model.passwordVisibility,
+                                      decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        labelStyle: const TextStyle(
+                                          fontFamily: 'Plus Jakarta Sans',
+                                          color: Color(0xFF57636C),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        hintStyle: const TextStyle(
+                                          fontFamily: 'Plus Jakarta Sans',
+                                          color: Color(0xFF57636C),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFE0E3E7),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFF4B39EF),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFFF5963),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFFF5963),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        filled: true,
+                                        fillColor: Color(0xCCFFFFFF),
+                                        suffixIcon: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                if (isVisible) {
+                                                  isVisible = false;
+                                                } else {
+                                                  isVisible = true;
+                                                }
+                                              });
+                                            },
+                                            focusNode:
+                                                FocusNode(skipTraversal: true),
+                                            child: isVisible
+                                                ? Icon(
+                                                    Icons.visibility_outlined,
+                                                    color: Color(0xFF57636C),
+                                                    size: 20,
+                                                  )
+                                                : Icon(
+                                                    Icons
+                                                        .visibility_off_outlined,
+                                                    color: Color(0xFF57636C),
+                                                    size: 20,
+                                                  )),
+                                      ),
+                                      style: const TextStyle(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        color: Color(0xFF101213),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      /* validator: _model.passwordControllerValidator
+                      .asValidator(context), */
+                                    ),
+                                  ),
+                                  BlocBuilder<AuthCubit, AuthState>(
+                                      builder: (context, state) {
+                                    if (state.ButtionState ==
+                                        ButtonState.success) {}
+                                    return Align(
+                                        alignment:
+                                            AlignmentDirectional(0.00, 0.00),
+                                        child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 0, 16),
+                                            child: ProgressButton.icon(
+                                                iconedButtons: {
+                                                  ButtonState.idle:
+                                                      IconedButton(
+                                                          text: "Send",
+                                                          icon: Icon(Icons.send,
+                                                              color:
+                                                                  Colors.white),
+                                                          color: Colors
+                                                              .deepPurple
+                                                              .shade500),
+                                                  ButtonState.loading:
+                                                      IconedButton(
+                                                          text: "Loading",
+                                                          color: Colors
+                                                              .deepPurple
+                                                              .shade700),
+                                                  ButtonState.fail:
+                                                      IconedButton(
+                                                          text: "Failed",
+                                                          icon: Icon(
+                                                              Icons.cancel,
+                                                              color:
+                                                                  Colors.white),
+                                                          color: Colors
+                                                              .red.shade300),
+                                                  ButtonState.success:
+                                                      IconedButton(
+                                                          text: "",
+                                                          icon: Icon(
+                                                            Icons.check_circle,
+                                                            color: Colors.white,
+                                                          ),
+                                                          color: Colors
+                                                              .green.shade400)
+                                                },
+                                                onPressed: () async {
+                                                  Cubitobj.userLogin();
+                                                },
+                                                state: state.ButtionState)));
+                                  }),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(0.00, 0.00),
+                                        child: Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 16),
-                                          child: ProgressButton.icon(
-                                              iconedButtons: {
-                                                ButtonState.idle: IconedButton(
-                                                    text: "Send",
-                                                    icon: Icon(Icons.send,
-                                                        color: Colors.white),
-                                                    color: Colors
-                                                        .deepPurple.shade500),
-                                                ButtonState.loading:
-                                                    IconedButton(
-                                                        text: "Loading",
-                                                        color: Colors.deepPurple
-                                                            .shade700),
-                                                ButtonState.fail: IconedButton(
-                                                    text: "Failed",
-                                                    icon: Icon(Icons.cancel,
-                                                        color: Colors.white),
-                                                    color: Colors.red.shade300),
-                                                ButtonState.success:
-                                                    IconedButton(
-                                                        text: "",
-                                                        icon: Icon(
-                                                          Icons.check_circle,
-                                                          color: Colors.white,
-                                                        ),
-                                                        color: Colors
-                                                            .green.shade400)
-                                              },
-                                              onPressed: () {
-                                                CurrentContext.stateprogress();
-
-                                                //CurrentContext.stateprogress();
-
-                                                print("${state.ButtionState}");
-                                              },
-                                              state: state.ButtionState)));
-                                }),
-                                Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Align(
-                                      alignment:
-                                          AlignmentDirectional(0.00, 0.00),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            16, 0, 16, 12),
-                                        child: Text(
-                                          'Or sign in with',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Plus Jakarta Sans',
-                                            color: Color(0xFF57636C),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
+                                                  16, 0, 16, 12),
+                                          child: Text(
+                                            'Or sign in with',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: 'Plus Jakarta Sans',
+                                              color: Color(0xFF57636C),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        InkWell(
-                                            onTap: () {
-                                              Cubitobj.googleLogin();
-                                            },
-                                            child: Container(
-                                              padding: EdgeInsets.all(20),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
-                                                  color: Colors.grey[200]),
-                                              child: Image.asset(
-                                                  'assets/logos/glogo.png'),
-                                              height: 90,
-                                            )),
-                                        const Gap(20),
-                                        InkWell(
-                                            child: Container(
-                                          padding: EdgeInsets.all(20),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.white),
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              color: Colors.grey[200]),
-                                          child: Image.asset(
-                                              'assets/logos/apple.png'),
-                                          height: 90,
-                                        ))
-                                      ],
-                                    ),
-                                    InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                            margin: EdgeInsets.only(top: 10),
-                                            child: const Text(
-                                                "Forgot Password?",
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      'Plus Jakarta Sans',
-                                                  color: Color(0xFF101213),
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                )))),
-                                  ],
-                                )
-                              ]))))),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                              onTap: () {
+                                                Cubitobj.Authenticateuser(
+                                                    'Google');
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.all(20),
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.white),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                    color: Colors.grey[200]),
+                                                child: Image.asset(
+                                                    'assets/logos/glogo.png'),
+                                                height: 90,
+                                              )),
+                                          const Gap(20),
+                                          InkWell(
+                                              onTap: () {
+                                                Cubitobj.Authenticateuser(
+                                                    'Apple');
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.all(20),
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.white),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                    color: Colors.grey[200]),
+                                                child: Image.asset(
+                                                    'assets/logos/apple.png'),
+                                                height: 90,
+                                              ))
+                                        ],
+                                      ),
+                                      InkWell(
+                                          onTap: () {},
+                                          child: Container(
+                                              margin: EdgeInsets.only(top: 10),
+                                              child: const Text(
+                                                  "Forgot Password?",
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Plus Jakarta Sans',
+                                                    color: Color(0xFF101213),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                  )))),
+                                    ],
+                                  )
+                                ]))));
+              })),
           Card(
             margin: EdgeInsets.all(16.0),
             child: Signup(),
           )
         ],
-      ))
+      )),
+      StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (BuildContext context, snapshot) {
+            int count = 1;
+            if (snapshot.hasData) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Parent()));
+              });
+
+              /*
+              if (count == 1) {
+                Cubitobj.stateprogress();
+                count++;
+                //Cubitobj.statesucess();
+              } else {}
+           */
+            }
+            return Text("");
+          }),
     ]));
   }
 }

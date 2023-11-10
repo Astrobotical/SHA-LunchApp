@@ -1,18 +1,74 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hla/StateData/Models/Fooditems.dart';
+import 'package:hla/StateData/Models/User.dart';
+import 'package:hla/StateData/bloc/ApiClient.dart';
+import 'package:hla/general/sharedpref.dart';
+import 'package:http/http.dart';
 import 'package:progress_state_button/progress_button.dart';
+import 'package:http/http.dart' as httpobject;
+import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthState(ButtionState: ButtonState.idle));
+  AuthCubit()
+      : super(AuthState(ButtionState: ButtonState.idle, AuthType: "null"));
   ButtonState? bstate;
-  StreamController<ButtonState> buttonState = StreamController<ButtonState>();
+  final ApiClient api = ApiClient();
+  late List<Fooditems> Menuitems;
+  late mainUser? loggedinuser;
   final googlesignIn = GoogleSignIn();
+  String? AuthType;
   GoogleSignInAccount? CurrentGoogleUser;
   GoogleSignInAccount get user => CurrentGoogleUser!;
+  TextEditingController EmailBox = TextEditingController();
+  TextEditingController Password = TextEditingController();
+
+  Future<void> userApiLogin() async {
+    emit(AuthLoading(ButtionState: ButtonState.loading, AuthType: "null"));
+    AuthType = "Api";
+    Response result = await api.userLogin(EmailBox.text, Password.text);
+    if (result.statusCode == 200) {
+      emit(AuthSuccessState(
+          ButtionState: ButtonState.success, AuthType: AuthType));
+      var retrievedJsonrendered = jsonDecode(result.body);
+      final Data = retrievedJsonrendered;
+      print(Data['Name']);
+      PreferenceHelper.saveCredentials(
+          name: Data['Name'],
+          isStudent: Data['Status'] != 'Cook' ? true : false,
+          id: Data["StudentID"].toString(),
+          Email: "Data['Email']");
+    }
+  }
+
+  Future<void> userLogin() async {
+    if (EmailBox.text.isEmpty) {
+      emit(AuthErrorState("The Student ID Box can't be empty"));
+      return;
+    }
+    if (Password.text.isEmpty) {
+      emit(AuthErrorState("Password Box can't be empty "));
+      return;
+    }
+    userApiLogin();
+  }
+
+  Future<void> initialize() async {
+    emit(AuthInitial(ButtionState: ButtonState.idle, AuthType: "null"));
+    await Future.delayed(const Duration(seconds: 2));
+    emit(AuthRefreshState(ButtionState: ButtonState.idle, AuthType: "null"));
+  }
+
+  Future appleLogin() async {
+    final appleProvider = AppleAuthProvider();
+    return await FirebaseAuth.instance.signInWithProvider(appleProvider);
+  }
 
   Future googleLogin() async {
     final googleUser = await googlesignIn.signIn();
@@ -25,106 +81,62 @@ class AuthCubit extends Cubit<AuthState> {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+
     return await FirebaseAuth.instance.signInWithCredential(creds);
   }
 
   Future googleLogout() async {
+    PreferenceHelper.clear();
     FirebaseAuth.instance.signOut();
   }
 
-  late final StreamSubscription<ButtonState> buttonStateSubscription;
-  /* StreamSubscription<ButtonState> _State() {
-    return buttonStateSubscription =
-        buttonState.stream.listen((ButtonState event) {
-      if (event == ButtonState.idle) {
-        emit(AuthState(ButtionState: state.ButtionState = ButtonState.idle as Stream<ButtonState>?));
-      } else if (event == ButtonState.loading) {
-        emit(AuthState(ButtionState: state.ButtionState = ButtonState.loading as Stream<ButtonState>?));
-      } else if (event == ButtonState.success) {
-        emit(AuthState(ButtionState: state.ButtionState = ButtonState.success as Stream<ButtonState>?));
-      } else if (event == ButtonState.fail) {
-        emit(AuthState(ButtionState: state.ButtionState = ButtonState.fail as Stream<ButtonState>?));
-      }
-    });
+  Future<void> Authenticateuser(String type) async {
+    final prefs = await SharedPreferences.getInstance();
+    // prefs.setString("AuthType", type);
+    PreferenceHelper.setAuthType(auth: type);
+    switch (type) {
+      case "Apple":
+        AuthType = "Apple";
+        await appleLogin();
+        break;
+      case "Google":
+        AuthType = "Google";
+        googleLogin();
+        break;
+      case "Api":
+        AuthType = "Api";
+        await userLogin();
+        break;
+    }
   }
-*/
-  Future<void> init() async {
-    /*emit(state);
-    bstate = ButtonState.loading;
-    Buttion
-    emit(bstate as AuthState);
-    //await Future.delayed(const Duration(seconds: 5));
-    bstate = ButtonState.success;
-    emit(bstate as AuthState);
 
-     */
-  }
+  Future<void> init() async {}
   Future<void> checker() async {
     statesucess();
     stateprogress();
   }
 
- Future <void> statesucess() async {
-    emit(AuthState(ButtionState: state.ButtionState = ButtonState.success));
+  void statesucess() {
+    emit(AuthSuccessState(
+        ButtionState: ButtonState.success, AuthType: AuthType));
   }
 
- Future<void> stateprogress() async {
-    emit(AuthState(ButtionState: state.ButtionState = ButtonState.loading));
-    await Future.delayed(const Duration(seconds: 2), () {
-      statesucess();
-    });
+  Future<void> stateprogress() async {
+    //emit(AuthState(ButtionState: state.ButtionState = ButtonState.loading));
+    emit(AuthLoading(
+        ButtionState: state.ButtionState = ButtonState.loading,
+        AuthType: "null"));
+
+    //statesucess();
+    // emit(AuthState(ButtionState: state.ButtionState = ButtonState.loading));
   }
 
   void statefail() {
-    emit(AuthState(ButtionState: state.ButtionState = ButtonState.fail));
+    emit(AuthState(
+        ButtionState: state.ButtionState = ButtonState.fail, AuthType: "null"));
   }
 
   void stateidle() {
-    buttonState.add(ButtonState.idle);
+    //  buttonState.add(ButtonState.idle);
   }
-
-  void dispose() {
-    buttonState.close();
-    buttonStateSubscription.cancel();
-  }
-/*
-  void addTodo({TODO? todo}) {
-    if (titleController.text.trim().isEmpty) {
-      emit(HomeScreenErrorState("Title can't be empty"));
-      return;
-    }
-
-    if (descriptionController.text.trim().isEmpty) {
-      emit(HomeScreenErrorState("Description can't be empty"));
-      return;
-    }
-    if (todo != null) {
-      int index = todos.indexOf(todo);
-      todos.removeAt(index);
-      todos.insert(
-          index, TODO(titleController.text, descriptionController.text));
-    } else {
-      todos.add(TODO(titleController.text, descriptionController.text));
-    }
-    emit(HomeScreenRefereshState());
-  }
-
-  void prePopulateData(TODO todo) {
-    titleController.text = todo.title;
-    descriptionController.text = todo.description;
-    emit(HomeScreenRefereshState());
-  }
-
-  void deleteTodo(TODO todo) {
-    todos.remove(todo);
-    emit(HomeScreenRefereshState());
-  }
-
-  void clearPreviousData() {
-    titleController.clear();
-    descriptionController.clear();
-    emit(HomeScreenRefereshState());
-  }
-
- */
 }

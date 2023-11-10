@@ -20,7 +20,7 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
               elevation: 0,
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pop(context);;
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,

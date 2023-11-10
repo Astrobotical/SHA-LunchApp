@@ -23,16 +23,15 @@ class _MenuQrGeneratorState extends State<MenuQrGenerator> {
   var selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    return Material(
+        child: Scaffold(
             backgroundColor: Colors.blue,
             appBar: AppBar(
               backgroundColor: Colors.blue,
               automaticallyImplyLeading: false,
               leading: IconButton(
                 onPressed: () {
-                   Navigator.pushNamed(context, '/');
+                   Navigator.pop(context);;
                 },
                 icon: Icon(
                   Icons.arrow_back_rounded,
@@ -93,7 +92,7 @@ class _MenuQrGeneratorState extends State<MenuQrGenerator> {
                           padding: EdgeInsets.all(20),
                           width: 150,
                           child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (Menulink.isEmpty) {
                                   SnackBar(
                                     content: Text(

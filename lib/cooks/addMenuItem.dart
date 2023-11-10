@@ -15,13 +15,15 @@ class _AdditemWidgetState extends State<AdditemWidget> {
   String MealType = 'Select Meal Type';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    Material(
+      child:Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 0,
               leading: IconButton(
                 onPressed: ()  {
-                 Navigator.pushNamed(context, '/');
+                 Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,
@@ -203,6 +205,6 @@ class _AdditemWidgetState extends State<AdditemWidget> {
                       style: TextStyle(fontSize: 20),
                     ))
               ],
-            )));
+            ))));
   }
 }

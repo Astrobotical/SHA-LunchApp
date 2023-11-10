@@ -11,6 +11,7 @@ import 'package:hla/cooks/menuCounter.dart';
 import 'package:hla/student/Foodstatus.dart';
 import 'package:hla/student/QrScanner.dart';
 import 'package:hla/student/Support.dart';
+import 'package:hla/student/requestinvoice.dart';
 
 class Approuting {
   //Generic Routes
@@ -22,6 +23,7 @@ class Approuting {
   static const String qrcodescanner = '/qrcodescanner';
   static const String foodstatus = '/foodstatus';
   static const String support = '/support';
+  static const String sinvoiceRquestor = '/sinvoiceRquestor';
   //Worker Routes
   static const String wHome = '/wHome';
   static const String additem = '/additem';
@@ -50,12 +52,14 @@ Route<dynamic> appRoutes(RouteSettings settings) {
 
 Route<dynamic> RoutesGenerator(RouteSettings settings) {
   switch (settings.name) {
+    case Approuting.sinvoiceRquestor:
+          return _pageBuildor((_) => const Requestinvoice(), settings: settings);
     case Approuting.support:
-    return _pageBuildor((_) => const SupportWidget(), settings: settings);
+      return _pageBuildor((_) => const SupportWidget(), settings: settings);
     case Approuting.foodstatus:
-    return _pageBuildor((_) => const FoodStatus(), settings: settings);
+      return _pageBuildor((_) => const FoodStatus(), settings: settings);
     case Approuting.qrcodescanner:
-    return _pageBuildor((_) => const QrScanner(), settings: settings);
+      return _pageBuildor((_) => const QrScanner(), settings: settings);
     case Approuting.additem:
       return _pageBuildor((_) => const AdditemWidget(), settings: settings);
     case Approuting.edititem:

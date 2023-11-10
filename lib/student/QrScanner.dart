@@ -17,7 +17,7 @@ class _QrScannerState extends State<QrScanner> {
           automaticallyImplyLeading: false,
           leading: IconButton(
                 onPressed: () {
-                   Navigator.pushNamed(context, '/');
+                   Navigator.pop(context);
                 },
     icon: Icon(
       Icons.arrow_back_rounded,

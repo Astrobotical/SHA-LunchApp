@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
+import 'package:hla/StateData/bloc/student/bloc/support_bloc_bloc.dart';
 import 'package:hla/general/Auth/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -18,22 +19,21 @@ import 'package:hla/cooks/addMenuItem.dart';
 import 'package:hla/cooks/menuCounter.dart';
 import 'package:hla/cooks/invoiceRequestor.dart';
 import 'package:hla/cooks/menuQrCodeGenerator.dart';
+import 'package:hla/StateData/bloc/CubitObserver.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    MultiBlocProvider(
-      providers: 
-      [
-        BlocProvider<AuthCubit>(
-          create: (context)=> AuthCubit()..init()
-          ),
-      ], child: const MainAuth())
-      );
-  //Bloc.observer = CubitObserver();
+  runApp(MultiBlocProvider(
+    providers: [
+    BlocProvider<AuthCubit>(
+      create: (context) => AuthCubit()..init()),
+      BlocProvider<SupportBlocBloc>(
+        create: (context)=> SupportBlocBloc()),
+  ], child: const MainAuth()));
+  Bloc.observer = CubitObserver();
 }
 
 class MyApp extends StatelessWidget {

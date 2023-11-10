@@ -10,6 +10,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:hla/general/HomePage.dart';
 import 'package:hla/general/FoodGalore/mainCatalog.dart';
 import 'package:hla/general/Settings/cooksSettings.dart';
+import 'package:hla/general/sharedpref.dart';
 
 class Parent extends StatefulWidget {
   Parent({super.key});
@@ -53,6 +54,11 @@ class _ParentBodyState extends State<ParentBody> {
   bool isCartEmpty = true;
   MaterialColor BGC = Colors.green;
 
+  void studentcheck() async {
+    Future.delayed(const Duration(seconds: 1), () async {
+      isStudent = (await PreferenceHelper.getValueByKeyBool(key: "isStudent"))!;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final Cubitobj = context.read<AuthCubit>();
@@ -68,6 +74,7 @@ class _ParentBodyState extends State<ParentBody> {
         bottomNavigationBar: isStudent
             ? CurvedNavigationBar(
                 backgroundColor: BGC,
+                color: Color.fromRGBO(244, 244, 244, 4),
                 items: <Widget>[
                   Icon(Icons.home_outlined, size: 30),
                   Icon(Icons.fastfood_outlined, size: 30),
@@ -118,7 +125,7 @@ class _ParentBodyState extends State<ParentBody> {
                       break;
                     case 1:
                       setState(() {
-                        BGC = Colors.amber;
+                        BGC = Colors.blueGrey;
                         currentIndex = 1;
                       });
                       print("Active Menu");
@@ -151,6 +158,7 @@ class _ParentBodyState extends State<ParentBody> {
               )
             : CurvedNavigationBar(
                 backgroundColor: BGC,
+            color: Color.fromRGBO(244, 244, 244, 3),
                 items: const <Widget>[
                   Icon(Icons.home, size: 30),
                   Icon(Icons.fastfood_outlined, size: 30),
@@ -168,7 +176,7 @@ class _ParentBodyState extends State<ParentBody> {
                       break;
                     case 1:
                       setState(() {
-                        BGC = Colors.amber;
+                        BGC = Colors.blueGrey;
                         currentIndex = 1;
                       });
                       print("Active Menu");

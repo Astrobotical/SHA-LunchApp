@@ -10,6 +10,32 @@ class FoodStatus extends StatefulWidget {
 class _FoodStatusState extends State<FoodStatus> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Material(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+                onPressed: () {
+                   Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.white,
+                  size: 30,
+                  ),
+                  ),
+                  actions: [],
+                  centerTitle: true,
+                  elevation: 0,
+                  ),
+        body:SingleChildScrollView(
+          child:Column(
+            children: []
+            )
+            
+          )
+      )
+    );
   }
 }

@@ -68,9 +68,9 @@ class CooksSettings extends StatelessWidget {
           ),
         ),
       ),
-       InkWell(
+      InkWell(
         onTap: () {
-          Navigator.pushReplacementNamed(context, '/editmenuitems');
+          Navigator.pushReplacementNamed(context, '/edititem');
         },
         child:
       Padding(

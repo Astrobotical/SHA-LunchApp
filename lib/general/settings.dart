@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hla/general/Settings/cooksSettings.dart';
 import 'package:hla/general/Settings/studentSettings.dart';
+import 'package:hla/general/sharedpref.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -11,14 +13,47 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  bool isStudent = true;
+  String? AuthType = "something";
+  String? raw;
+  String? Username;
+  String? Email = "Yes";
+
+  void initState() {
+    super.initState();
+    _loadCounter();
+  }
+
+  void _loadCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      Username = prefs.getString("Name");
+      Future.delayed(const Duration(seconds: 1), () async {
+        AuthType = await PreferenceHelper.getValueByKey(key: "AuthType");
+      });
+      Future.delayed(const Duration(seconds: 1), () async {
+        Email = await PreferenceHelper.getValueByKey(key: "Email");
+      });
+        Future.delayed(const Duration(seconds: 1), () async {
+          isStudent = (await PreferenceHelper.getValueByKeyBool(key: "isStudent"))!;
+        });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isStudent = true;
-    String? Username;
-    String? Email;
-    if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
-      Username = FirebaseAuth.instance.currentUser!.displayName;
-      Email = FirebaseAuth.instance.currentUser!.email;
+    switch (AuthType) {
+      case "Google":
+        if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
+          raw = FirebaseAuth.instance.currentUser!.displayName;
+          List<String>? presplit = raw?.split(" ");
+          Username = "${presplit![0]} .${presplit![1][0]}";
+        }
+        break;
+      case "Apple":
+        break;
+      case "Api":
+        break;
     }
     return Column(
       mainAxisSize: MainAxisSize.max,

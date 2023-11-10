@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:gap/gap.dart';
+
 class Signup extends StatelessWidget {
   const Signup({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final Cubitobj = context.read<AuthCubit>();
     return SingleChildScrollView(
         child: Align(
             alignment: AlignmentDirectional(0.00, -1.00),
@@ -207,152 +212,56 @@ class Signup extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               InkWell(
-                                  onTap : (){},
+                                  onTap: () {
+                                    Cubitobj.googleLogin();
+                                  },
                                   child: Container(
                                     padding: EdgeInsets.all(20),
                                     decoration: BoxDecoration(
                                         border: Border.all(color: Colors.white),
                                         borderRadius: BorderRadius.circular(16),
-                                        color: Colors.grey[200]
-                                    ), child: Image.asset('assets/logos/glogo.png'),
+                                        color: Colors.grey[200]),
+                                    child:
+                                        Image.asset('assets/logos/glogo.png'),
                                     height: 90,
-                                  )
-                              ),
+                                  )),
                               const Gap(20),
                               InkWell(
-                                  child:Container(
-                                    padding: EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(16),
-                                        color: Colors.grey[200]
-                                    ),
-                                    child:Image.asset('assets/logos/apple.png'),
-                                    height: 90,
-                                  )
-                              )
+                                  child: Container(
+                                padding: EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Colors.grey[200]),
+                                child: Image.asset('assets/logos/apple.png'),
+                                height: 90,
+                              ))
                             ],
                           ),
-                          /*
-                          Align(
-                            alignment: AlignmentDirectional(0.00, 0.00),
-                            child: Wrap(
-                              spacing: 16,
-                              runSpacing: 0,
-                              alignment: WrapAlignment.center,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              direction: Axis.horizontal,
-                              runAlignment: WrapAlignment.center,
-                              verticalDirection: VerticalDirection.down,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 16),
-                                  child: Container(
-                                    width: 230,
-                                    height: 44,
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 0, 0),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Color(0xFFE0E3E7),
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(40),
-                                      color: Colors.white,
-                                    ),
-                                    child: const Align(
-                                      child: Wrap(
-                                        alignment: WrapAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: [
-                                          FaIcon(FontAwesomeIcons.google,
-                                              size: 20, color: Colors.black),
-                                          Center(
-                                              child: Text(
-                                                  'Continue with Google',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Plus Jakarta Sans',
-                                                    color: Color(0xFF101213),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                  )))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 16),
-                                  child: Container(
-                                      width: 230,
-                                      height: 44,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 0),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Color(0xFFE0E3E7),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(40),
-                                        color: Colors.white,
-                                      ),
-                                      child: const Align(
-                                        child: Wrap(
-                                          alignment: WrapAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.center,
-                                          children: [
-                                            FaIcon(
-                                              FontAwesomeIcons.apple,
-                                              size: 20,
-                                              color: Colors.black,
-                                            ),
-                                            Center(
-                                              child: Text('Continue with Apple',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Plus Jakarta Sans',
-                                                    color: Color(0xFF101213),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            )
-                                          ],
-                                        ),
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
-                           */
                         ],
                       )
                     ]))));
   }
+
   Widget buildTextWithIcon() {
     return ProgressButton.icon(iconedButtons: {
-    ButtonState.idle: IconedButton(
-    text: "Send",
-    icon: Icon(Icons.send, color: Colors.white),
-    color: Colors.deepPurple.shade500),
-    ButtonState.loading:
-    IconedButton(text: "Loading", color: Colors.deepPurple.shade700),
-    ButtonState.fail: IconedButton(
-    text: "Failed",
-    icon: Icon(Icons.cancel, color: Colors.white),
-    color: Colors.red.shade300),
-    ButtonState.success: IconedButton(
-    text: "",
-    icon: Icon(
-    Icons.check_circle,
-    color: Colors.white,
-    ),
-    color: Colors.green.shade400)
+      ButtonState.idle: IconedButton(
+          text: "Send",
+          icon: Icon(Icons.send, color: Colors.white),
+          color: Colors.deepPurple.shade500),
+      ButtonState.loading:
+          IconedButton(text: "Loading", color: Colors.deepPurple.shade700),
+      ButtonState.fail: IconedButton(
+          text: "Failed",
+          icon: Icon(Icons.cancel, color: Colors.white),
+          color: Colors.red.shade300),
+      ButtonState.success: IconedButton(
+          text: "",
+          icon: Icon(
+            Icons.check_circle,
+            color: Colors.white,
+          ),
+          color: Colors.green.shade400)
     }, onPressed: () {}, state: ButtonState.success);
-}
+  }
 }
