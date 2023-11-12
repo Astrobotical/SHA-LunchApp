@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
+import 'package:hla/StateData/bloc/FoodGalore/cubit/food_cubit.dart';
 import 'package:hla/StateData/bloc/student/bloc/support_bloc_bloc.dart';
 import 'package:hla/general/Auth/main.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,6 +33,8 @@ Future<void> main() async {
       create: (context) => AuthCubit()..init()),
       BlocProvider<SupportBlocBloc>(
         create: (context)=> SupportBlocBloc()),
+      BlocProvider<FoodCubit>(
+          create: (context)=>FoodCubit()),
   ], child: const MainAuth()));
   Bloc.observer = CubitObserver();
 }

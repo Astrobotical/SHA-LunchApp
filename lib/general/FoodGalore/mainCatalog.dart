@@ -3,7 +3,7 @@ import 'package:slide_switcher/slide_switcher.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:hla/StateData/Models/MenuItemModel.dart';
-
+import 'package:hla/general/FoodGalore/subWidgets/CurrentMenu.dart';
 class FoodCatalog extends StatefulWidget {
   const FoodCatalog({super.key});
   @override
@@ -28,10 +28,13 @@ class _FoodCatalogState extends State<FoodCatalog>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
+    return 
+    SingleChildScrollView(
+      child:
+    SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child:
+    Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
@@ -100,12 +103,29 @@ class _FoodCatalogState extends State<FoodCatalog>
                   ),
                 ],
               ),
-              Expanded(
-                child: TabBarView(
+               Expanded(
+                child:  TabBarView(
                   controller: _tabController,
-                  children: [
-                    // Fruits tab page
-                    SwipeTo(
+                  children: const [
+                    CurrentMenu(MenuType: "Breakfast"),
+                    CurrentMenu(MenuType: "Lunch"),
+                    CurrentMenu(MenuType: "Dinner")
+                  ],
+                ),
+               )
+            ])
+    ));
+  }
+}
+/*
+class Menuitem extends StatelessWidget {
+  final MenuItemModel item;
+  const Menuitem({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context, {Data}) {
+    final methodobj = context.read<AppState>();
+    return  SwipeTo(
                       onRightSwipe: () {
                         ArtSweetAlert.show(
                           context: context,
@@ -175,95 +195,5 @@ class _FoodCatalogState extends State<FoodCatalog>
                         ),
                       ),
                     ),
-                    // Vegetables tab page
-                    Center(
-                      child: Text('Vegetables'),
-                    ),
-                    Center(
-                      child: Text('Vegetables'),
-                    ),
-                  ],
-                ),
-              )
-            ]));
-  }
-}
-/*
-class Menuitem extends StatelessWidget {
-  final MenuItemModel item;
-  const Menuitem({super.key, required this.item});
-
-  @override
-  Widget build(BuildContext context, {Data}) {
-    final methodobj = context.read<AppState>();
-    return SwipeTo(
-      onRightSwipe: () {
-        print("You swiped right nerd");
-         ArtSweetAlert.show(
-                      context: context,
-                      artDialogArgs: ArtDialogArgs(
-                        type: ArtSweetAlertType.success,
-                        title: "Item Selected",
-                        text: "Item has been added to your cart",
-                        onConfirm: () {
-                          print("Item added to cart");
-                        },
-                      ),
-                    );
-      },
-      iconOnRightSwipe: Icons.arrow_right_alt_rounded,
-      rightSwipeWidget: const Text("Item Selected"),
-      child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Color(0xFFF1F4F8),
-          ),
-          child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                       item.foodImage,
-                        width: double.infinity,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                  child: Text(
-                    item.foodName,
-                    style: const TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
-                      color: Color(0xFF14181B),
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
 */

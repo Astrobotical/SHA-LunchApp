@@ -7,4 +7,19 @@ sealed class FoodState extends Equatable {
   List<Object> get props => [];
 }
 
-final class FoodInitial extends FoodState {}
+final class FoodInitial extends FoodState {
+
+}
+final class MenuChecker extends FoodState{
+  bool isActiveMenu;
+  MenuChecker({required this.isActiveMenu});
+}
+final class FoodLoading extends FoodState{
+
+}
+final class Foodempty extends FoodState{
+
+}
+final class FoodDoneLoading extends FoodState{
+
+}

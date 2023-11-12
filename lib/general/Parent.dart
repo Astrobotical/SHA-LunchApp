@@ -52,7 +52,7 @@ class _ParentBodyState extends State<ParentBody> {
   int currentIndex = 0;
   bool isStudent = true;
   bool isCartEmpty = true;
-  MaterialColor BGC = Colors.green;
+  MaterialColor BGC = Colors.deepPurple;
 
   void studentcheck() async {
     Future.delayed(const Duration(seconds: 1), () async {
@@ -62,15 +62,19 @@ class _ParentBodyState extends State<ParentBody> {
   @override
   Widget build(BuildContext context) {
     final Cubitobj = context.read<AuthCubit>();
-    return Scaffold(
+    return
+      Material(
+        child:
+      Scaffold(
         backgroundColor: BGC,
         body: SingleChildScrollView(
-          child: Container(
-              margin: EdgeInsets.only(top: 50),
-              child: isStudent
+          padding: EdgeInsets.only(top: 50),
+          child: Column(
+            children:[
+              isStudent
                   ? _StudentOptions[currentIndex]
-                  : _CooksOptions[currentIndex]),
-        ),
+                  : _CooksOptions[currentIndex],
+        ]),),
         bottomNavigationBar: isStudent
             ? CurvedNavigationBar(
                 backgroundColor: BGC,
@@ -119,7 +123,7 @@ class _ParentBodyState extends State<ParentBody> {
                   switch (value) {
                     case 0:
                       setState(() {
-                        BGC = Colors.green;
+                        BGC = Colors.deepPurple;
                         currentIndex = 0;
                       });
                       break;
@@ -170,7 +174,7 @@ class _ParentBodyState extends State<ParentBody> {
                   switch (value) {
                     case 0:
                       setState(() {
-                        BGC = Colors.green;
+                        BGC = Colors.deepPurple;
                         currentIndex = 0;
                       });
                       break;
@@ -205,6 +209,6 @@ class _ParentBodyState extends State<ParentBody> {
                       Navigator.pushReplacementNamed(context, '/Auth');
                       break;
                   }
-                }));
+                })));
   }
 }

@@ -1,4 +1,4 @@
-import 'dart:convert';
+  import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -83,6 +83,14 @@ class ApiClient {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
+    );
+    return response;
+  }
+  Future<Response> ActiveMenuChecker() async{
+    final response = await http.get(Uri.parse("https://api.romarioburke.com/api/v1/cart/getmenu"),
+        headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
     );
     return response;
   }

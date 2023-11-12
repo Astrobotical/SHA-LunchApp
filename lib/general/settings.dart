@@ -28,14 +28,20 @@ class _SettingsState extends State<Settings> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       Username = prefs.getString("Name");
+
       Future.delayed(const Duration(seconds: 1), () async {
         AuthType = await PreferenceHelper.getValueByKey(key: "AuthType");
       });
       Future.delayed(const Duration(seconds: 1), () async {
         Email = await PreferenceHelper.getValueByKey(key: "Email");
+        String? emails = await PreferenceHelper.getValueByKey(key: "Email");
+        print ("Emails ${emails}");
       });
         Future.delayed(const Duration(seconds: 1), () async {
-          isStudent = (await PreferenceHelper.getValueByKeyBool(key: "isStudent"))!;
+          bool? person = await PreferenceHelper.getValueByKeyBool(key: "isStudent");
+          print("is he a student ? ${person}");
+          bool? testing =  await PreferenceHelper.getValueByKeyBool(key: "isStudent");
+          //isStudent
         });
     });
   }
