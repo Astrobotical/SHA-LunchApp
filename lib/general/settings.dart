@@ -13,36 +13,32 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool isStudent = true;
+  bool? isStudent;
+  bool isStudentSetter = false;
   String? AuthType = "something";
   String? raw;
   String? Username;
   String? Email = "Yes";
 
   void initState() {
-    super.initState();
     _loadCounter();
+    super.initState();
   }
 
   void _loadCounter() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       Username = prefs.getString("Name");
-
+      isStudent = prefs.getBool("isStudent");
+      Email = prefs.getString("Email");
+      isStudentSetter = isStudent!;
       Future.delayed(const Duration(seconds: 1), () async {
         AuthType = await PreferenceHelper.getValueByKey(key: "AuthType");
       });
       Future.delayed(const Duration(seconds: 1), () async {
+        //  Email = await PreferenceHelper.getValueByKey(key: "Email");
         Email = await PreferenceHelper.getValueByKey(key: "Email");
-        String? emails = await PreferenceHelper.getValueByKey(key: "Email");
-        print ("Emails ${emails}");
       });
-        Future.delayed(const Duration(seconds: 1), () async {
-          bool? person = await PreferenceHelper.getValueByKeyBool(key: "isStudent");
-          print("is he a student ? ${person}");
-          bool? testing =  await PreferenceHelper.getValueByKeyBool(key: "isStudent");
-          //isStudent
-        });
     });
   }
 
@@ -129,7 +125,7 @@ class _SettingsState extends State<Settings> {
             ),
           ),
         ),
-        isStudent ? StudentSettings() : const CooksSettings(),
+        isStudentSetter ? StudentSettings() : const CooksSettings(),
       ],
     );
   }

@@ -23,15 +23,14 @@ class _MenuQrGeneratorState extends State<MenuQrGenerator> {
   var selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    return Material(
-        child: Scaffold(
+    return  Scaffold(
             backgroundColor: Colors.blue,
             appBar: AppBar(
               backgroundColor: Colors.blue,
               automaticallyImplyLeading: false,
               leading: IconButton(
                 onPressed: () {
-                   Navigator.pop(context);;
+                   Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.arrow_back_rounded,
@@ -112,7 +111,7 @@ class _MenuQrGeneratorState extends State<MenuQrGenerator> {
                   ],
                 ),
               ),
-            )));
+            ));
   }
 
   _shareQrCode() async {

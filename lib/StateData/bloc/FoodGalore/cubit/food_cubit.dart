@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -30,12 +31,32 @@ class FoodCubit extends Cubit<FoodState> {
     if (result.statusCode == 200) {
       final Map<String, dynamic> items = jsonDecode(result.body);
       Iterable Data = items['data'];
-      List Sorted = Data.where((item) =>item["ItemCategory"] == Category).toList();
-      Sideitems =  Data.where((item) => item["SideTarget"] == Category).toList();
+      List Sorted =
+          Data.where((item) => item["ItemCategory"] == Category).toList();
+      Sideitems = Data.where((item) => item["SideTarget"] == Category).toList();
       print(Sorted);
 //     emit(FoodDoneLoading());
       return Sorted;
     } else {}
     return Future.value([]);
   }
+
+  Future<List<dynamic>> getActiveMenu() async {
+    
+    return Future.value([]);
+  }
+
+  Future<void> AddItem(File filePath, String foodName, String category,
+      String mealType, String studentType) async {
+    StreamedResponse result = await api.addMenuItem(
+        filePath.path, foodName, category, studentType, mealType);
+    if (result.statusCode == 200) {
+      emit(FoodAdded());
+    } else {
+      print(result.headers.toString());
+    }
+  }
+
+  Future<void> editItem() async {}
+  Future<void> deleteItem() async {}
 }

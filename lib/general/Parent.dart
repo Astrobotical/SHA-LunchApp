@@ -11,6 +11,8 @@ import 'package:hla/general/HomePage.dart';
 import 'package:hla/general/FoodGalore/mainCatalog.dart';
 import 'package:hla/general/Settings/cooksSettings.dart';
 import 'package:hla/general/sharedpref.dart';
+import 'package:hla/student/cart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Parent extends StatefulWidget {
   Parent({super.key});
@@ -34,10 +36,25 @@ class ParentBody extends StatefulWidget {
 }
 
 class _ParentBodyState extends State<ParentBody> {
+  late bool? isStudent;
+  bool isStudentSetter = false;
+  void initState() {
+    _loadCounter();
+    super.initState();
+  }
+
+  _loadCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isStudent = prefs.getBool("isStudent");
+      isStudentSetter = isStudent!;
+    });
+  }
+
   final List<Widget> _StudentOptions = [
     HomePage(),
     FoodCatalog(),
-    const Text('Cart'),
+    Cart(),
     Settings(),
     const Text("Logout"),
   ];
@@ -49,166 +66,172 @@ class _ParentBodyState extends State<ParentBody> {
     Settings(),
     const Text("Logout"),
   ];
+
   int currentIndex = 0;
-  bool isStudent = true;
+
   bool isCartEmpty = true;
-  MaterialColor BGC = Colors.deepPurple;
+  Color BGC = Color.fromRGBO(104, 93, 156, 1);
 
   void studentcheck() async {
     Future.delayed(const Duration(seconds: 1), () async {
       isStudent = (await PreferenceHelper.getValueByKeyBool(key: "isStudent"))!;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final Cubitobj = context.read<AuthCubit>();
-    return
-      Material(
-        child:
-      Scaffold(
-        backgroundColor: BGC,
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 50),
-          child: Column(
-            children:[
-              isStudent
+    return Scaffold(
+            backgroundColor: BGC,
+            body: SingleChildScrollView(
+              padding: EdgeInsets.only(top: 50),
+              child: isStudentSetter
                   ? _StudentOptions[currentIndex]
                   : _CooksOptions[currentIndex],
-        ]),),
-        bottomNavigationBar: isStudent
-            ? CurvedNavigationBar(
-                backgroundColor: BGC,
-                color: Color.fromRGBO(244, 244, 244, 4),
-                items: <Widget>[
-                  Icon(Icons.home_outlined, size: 30),
-                  Icon(Icons.fastfood_outlined, size: 30),
-                  isCartEmpty
-                      ? Icon(Icons.shopping_cart_outlined, size: 30)
-                      : badges.Badge(
-                          position:
-                              badges.BadgePosition.topEnd(top: -10, end: -12),
-                          showBadge: true,
-                          ignorePointer: false,
-                          onTap: () {},
-                          badgeContent:
-                              Text('1', style: TextStyle(color: Colors.white)),
-                          badgeAnimation: badges.BadgeAnimation.rotation(
-                            animationDuration: Duration(seconds: 1),
-                            colorChangeAnimationDuration: Duration(seconds: 1),
-                            loopAnimation: false,
-                            curve: Curves.fastOutSlowIn,
-                            colorChangeAnimationCurve: Curves.easeInCubic,
-                          ),
-                          badgeStyle: badges.BadgeStyle(
-                            shape: badges.BadgeShape.circle,
-                            badgeColor: Colors.blue,
-                            padding: EdgeInsets.all(5),
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(
-                                color: const Color.fromARGB(255, 235, 1, 1),
-                                width: 2),
-                            badgeGradient: badges.BadgeGradient.linear(
-                              colors: [Colors.blue, Colors.yellow],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
+            ),
+            bottomNavigationBar: isStudentSetter
+                ? CurvedNavigationBar(
+                    backgroundColor: BGC,
+                    color: Color.fromRGBO(244, 244, 244, 4),
+                    items: <Widget>[
+                      Icon(Icons.home_outlined, size: 30),
+                      Icon(Icons.fastfood_outlined, size: 30),
+                      isCartEmpty
+                          ? Icon(Icons.shopping_cart_outlined, size: 30)
+                          : badges.Badge(
+                              position: badges.BadgePosition.topEnd(
+                                  top: -10, end: -12),
+                              showBadge: true,
+                              ignorePointer: false,
+                              onTap: () {},
+                              badgeContent: Text('1',
+                                  style: TextStyle(color: Colors.white)),
+                              badgeAnimation: badges.BadgeAnimation.rotation(
+                                animationDuration: Duration(seconds: 1),
+                                colorChangeAnimationDuration:
+                                    Duration(seconds: 1),
+                                loopAnimation: false,
+                                curve: Curves.fastOutSlowIn,
+                                colorChangeAnimationCurve: Curves.easeInCubic,
+                              ),
+                              badgeStyle: badges.BadgeStyle(
+                                shape: badges.BadgeShape.circle,
+                                badgeColor: Colors.blue,
+                                padding: EdgeInsets.all(5),
+                                borderRadius: BorderRadius.circular(4),
+                                borderSide: BorderSide(
+                                    color: const Color.fromARGB(255, 235, 1, 1),
+                                    width: 2),
+                                badgeGradient: badges.BadgeGradient.linear(
+                                  colors: [Colors.blue, Colors.yellow],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                                elevation: 0,
+                              ),
+                              child:
+                                  Icon(Icons.shopping_cart_outlined, size: 30),
                             ),
-                            elevation: 0,
-                          ),
-                          child: Icon(Icons.shopping_cart_outlined, size: 30),
-                        ),
-                  Icon(Icons.settings_outlined, size: 30),
-                  Icon(Icons.logout_outlined, size: 30)
-                ],
-                onTap: (value) {
-                  switch (value) {
-                    case 0:
-                      setState(() {
-                        BGC = Colors.deepPurple;
-                        currentIndex = 0;
-                      });
-                      break;
-                    case 1:
-                      setState(() {
-                        BGC = Colors.blueGrey;
-                        currentIndex = 1;
-                      });
-                      print("Active Menu");
-                      break;
-                    case 2:
-                      setState(() {
-                        BGC = Colors.grey;
-                        currentIndex = 2;
-                      });
-                      print("Categories");
-                      break;
-                    case 3:
-                      setState(() {
-                        BGC = Colors.blue;
-                        currentIndex = 3;
-                      });
-                      print("Settings");
-                      break;
-                    case 4:
-                      setState(() {
-                        BGC = Colors.red;
-                        currentIndex = 4;
-                      });
-                      print("Logout");
-                      Cubitobj.googleLogout();
-                      Navigator.pushReplacementNamed(context, '/Auth');
-                      break;
-                  }
-                },
-              )
-            : CurvedNavigationBar(
-                backgroundColor: BGC,
-            color: Color.fromRGBO(244, 244, 244, 3),
-                items: const <Widget>[
-                  Icon(Icons.home, size: 30),
-                  Icon(Icons.fastfood_outlined, size: 30),
-                  Icon(Icons.build_outlined, size: 30),
-                  Icon(Icons.settings_outlined, size: 30),
-                  Icon(Icons.logout_outlined, size: 30)
-                ],
-                onTap: (value) {
-                  switch (value) {
-                    case 0:
-                      setState(() {
-                        BGC = Colors.deepPurple;
-                        currentIndex = 0;
-                      });
-                      break;
-                    case 1:
-                      setState(() {
-                        BGC = Colors.blueGrey;
-                        currentIndex = 1;
-                      });
-                      print("Active Menu");
-                      break;
-                    case 2:
-                      setState(() {
-                        BGC = Colors.grey;
-                        currentIndex = 2;
-                      });
-                      print("Categories");
-                      break;
-                    case 3:
-                      setState(() {
-                        BGC = Colors.blue;
-                        currentIndex = 3;
-                      });
-                      print("Settings");
-                      break;
-                    case 4:
-                      setState(() {
-                        BGC = Colors.red;
-                        currentIndex = 4;
-                      });
-                      print("Logout");
-                      Cubitobj.googleLogout();
-                      Navigator.pushReplacementNamed(context, '/Auth');
-                      break;
-                  }
-                })));
+                      Icon(Icons.settings_outlined, size: 30),
+                      Icon(Icons.logout_outlined, size: 30)
+                    ],
+                    onTap: (value) async {
+                      switch (value) {
+                        case 0:
+                          setState(() {
+                            BGC = Color.fromRGBO(104, 93, 156, 1);
+                            currentIndex = 0;
+                          });
+                          break;
+                        case 1:
+                          setState(() {
+                            BGC = Colors.blueGrey;
+                            currentIndex = 1;
+                          });
+                          print("Active Menu");
+                          break;
+                        case 2:
+                          setState(() {
+                            BGC = Colors.white;
+                            currentIndex = 2;
+                          });
+                          print("Categories");
+                          break;
+                        case 3:
+                          setState(() {
+                            BGC = Colors.blue;
+                            currentIndex = 3;
+                          });
+                          print("Settings");
+                          break;
+                        case 4:
+                          setState(() {
+                            BGC = Colors.red;
+                            currentIndex = 4;
+                          });
+
+                          print("Logout");
+                          var prefs = await SharedPreferences.getInstance();
+                          if (await prefs.clear()) {
+                            Cubitobj.googleLogout();
+                            Navigator.pushReplacementNamed(context, '/Auth');
+                          }
+                          break;
+                      }
+                    },
+                  )
+                : CurvedNavigationBar(
+                    backgroundColor: BGC,
+                    color: Color.fromRGBO(244, 244, 244, 3),
+                    items: const <Widget>[
+                      Icon(Icons.home_outlined, size: 30),
+                      Icon(Icons.fastfood_outlined, size: 30),
+                      Icon(Icons.build_outlined, size: 30),
+                      Icon(Icons.settings_outlined, size: 30),
+                      Icon(Icons.logout_outlined, size: 30)
+                    ],
+                    onTap: (value) async{
+                      switch (value) {
+                        case 0:
+                          setState(() {
+                            BGC = Color.fromRGBO(104, 93, 156, 1);
+                            currentIndex = 0;
+                          });
+                          break;
+                        case 1:
+                          setState(() {
+                            BGC = Colors.blueGrey;
+                            currentIndex = 1;
+                          });
+                          print("Active Menu");
+                          break;
+                        case 2:
+                          setState(() {
+                            BGC = Colors.white;
+                            currentIndex = 2;
+                          });
+                          print("Categories");
+                          break;
+                        case 3:
+                          setState(() {
+                            BGC = Colors.blue;
+                            currentIndex = 3;
+                          });
+                          print("Settings");
+                          break;
+                        case 4:
+                          setState(() {
+                            BGC = Colors.red;
+                            currentIndex = 4;
+                          });
+                          print("Logout");
+                         var prefs = await SharedPreferences.getInstance();
+                          if (await prefs.clear()) {
+                            Cubitobj.googleLogout();
+                            Navigator.pushReplacementNamed(context, '/Auth');
+                          }
+                          break;
+                      }
+                    }));
   }
 }

@@ -1,4 +1,5 @@
-  import 'dart:convert';
+import 'dart:convert';
+
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -69,7 +70,7 @@ class ApiClient {
 
   Future<Response> getActiveMenu() async {
     final response = await http.get(
-      Uri.parse("https://api.romarioburke.com/api/v1/catalogs"),
+      Uri.parse("https://api.romarioburke.com/api/v1/cart/getmenu"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -86,22 +87,74 @@ class ApiClient {
     );
     return response;
   }
-  Future<Response> ActiveMenuChecker() async{
-    final response = await http.get(Uri.parse("https://api.romarioburke.com/api/v1/cart/getmenu"),
-        headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        },
-    );
-    return response;
-  }
-  Future<Response> deleteMenuitem(String itemID) async{
-     final response = await http.post(
-      Uri.parse("https://api.romarioburke.com/api/v1/catalogs"),
+
+  Future<Response> ActiveMenuChecker() async {
+    final response = await http.get(
+      Uri.parse("https://api.romarioburke.com/api/v1/cart/getmenu"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-        body: jsonEncode(<String, String>{'Item_id': itemID})
+      
     );
+    return response;
+  }
+
+  Future<Response> deleteMenuitem(String itemID) async {
+    final response = await http.post(
+        Uri.parse("https://api.romarioburke.com/api/v1/catalogs"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{'Item_id': itemID}));
+    return response;
+  }
+
+  Future<Response> sendFeedbacks(
+      String studentID, String type, String feedback) async {
+    final response = await http.post(
+        Uri.parse("https://api.romarioburke.com/api/v1/feeds/reportfeedback"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'StudentID': studentID,
+          'Feedback': feedback,
+          'Type': type
+        }));
+    return response;
+  }
+
+  Future<StreamedResponse> addMenuItem(String filelocation, String foodName,
+      String category, String studentType, String mealType) async {
+    Map<String, String> headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    Map<String, String> body = {
+      'Item_id': DateTime.now().millisecondsSinceEpoch.toString(),
+      'Item_category': category,
+      'Item_description': "filler",
+      'Item_Target': studentType,
+      'Side_Target': mealType,
+      'Item_name': foodName,
+    };
+    final response = await http.MultipartRequest(
+        'POST', Uri.parse("https://api.romarioburke.com/api/v1/Items/Additem"))
+      ..fields.addAll(body)
+      ..headers.addAll(headers)
+      ..files
+          .add(await http.MultipartFile.fromPath('Item_image', filelocation));
+    return response.send();
+  }
+
+  Future<Response> accountPresent(String email) async {
+    final response = await http.post(
+      Uri.parse("https://api.romarioburke.com/api/v1/auth/hasaccount"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'Email': email,
+        }));
     return response;
   }
 }

@@ -11,9 +11,7 @@ class InvoiceRequestor extends StatefulWidget {
 class _InvoiceRequestorState extends State<InvoiceRequestor> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return  Scaffold(
         backgroundColor: Colors.blue,
         appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -608,7 +606,7 @@ class _InvoiceRequestorState extends State<InvoiceRequestor> {
           ],
         ),
       ),
-    )
+    
     );
   }
 }

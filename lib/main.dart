@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
+import 'package:hla/StateData/bloc/FoodGalore/cubit/cart_cubit.dart';
 import 'package:hla/StateData/bloc/FoodGalore/cubit/food_cubit.dart';
+import 'package:hla/StateData/bloc/student/bloc/cubit/support_cubit_cubit.dart';
 import 'package:hla/StateData/bloc/student/bloc/support_bloc_bloc.dart';
 import 'package:hla/general/Auth/main.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hla/student/Support.dart';
 import 'firebase_options.dart';
 import 'package:bloc/bloc.dart';
 import 'package:hla/general/foodGalore/mainCatalog.dart';
@@ -30,11 +33,13 @@ Future<void> main() async {
   runApp(MultiBlocProvider(
     providers: [
     BlocProvider<AuthCubit>(
-      create: (context) => AuthCubit()..init()),
-      BlocProvider<SupportBlocBloc>(
-        create: (context)=> SupportBlocBloc()),
+      create: (context) => AuthCubit()),
+      BlocProvider<SupportCubitCubit>(
+        create: (context)=> SupportCubitCubit()..init()),
       BlocProvider<FoodCubit>(
           create: (context)=>FoodCubit()),
+          BlocProvider<CartCubit>(
+            create: (context)=>CartCubit()..startup())
   ], child: const MainAuth()));
   Bloc.observer = CubitObserver();
 }

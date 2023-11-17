@@ -26,13 +26,23 @@ class _MainAuthState extends State<MainAuth> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      onGenerateRoute: RoutesGenerator,
       home: BlocProvider(
         create: (context) => AuthCubit()..initialize(),
-        child: Scaffold(
-          body: TabArea(),
+        child: BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthSuccessState) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Parent()));
+                      });       
+            }
+          },
+          child: Scaffold(
+            body: TabArea(),
+          ),
         ),
       ),
-      onGenerateRoute: RoutesGenerator,
     );
   }
 }
@@ -105,26 +115,18 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
               margin: EdgeInsets.all(16.0),
               child: BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, snapshot) {
-                if (snapshot is AuthLoading) {
-                  
-                }
-                if (snapshot is AuthSuccessState) {
-                  setState(() {
-                    loading = false;
-                    done = true;
-                    });
-                }
+                if (snapshot is AuthLoading) {}
+                if (snapshot is AuthSuccessState) {}
               }, builder: (context, state) {
                 if (state.ButtionState == ButtonState.loading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if(state.ButtionState == ButtonState.success)
-                {
+                if (state.ButtionState == ButtonState.success) {
                   Future.delayed(const Duration(seconds: 4));
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Parent()));
-                      });
+                  // Navigator.pushNamed(context, '/');
+                  
+               
+                      
                 }
                 return SingleChildScrollView(
                     child: Align(
@@ -231,8 +233,6 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
-                                      /* validator: _model.emailAddressControllerValidator
-                      .asValidator(context), */
                                     ),
                                   ),
                                   Padding(
@@ -242,6 +242,7 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                       controller: Cubitobj.Password,
                                       textCapitalization:
                                           TextCapitalization.sentences,
+
                                       //  obscureText: !_model.passwordVisibility,
                                       decoration: InputDecoration(
                                         labelText: 'Password',

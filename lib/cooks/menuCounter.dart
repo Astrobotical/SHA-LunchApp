@@ -12,9 +12,7 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home:Scaffold(
+    return Scaffold(
         backgroundColor: Colors.blue,
         appBar: AppBar(
               elevation: 0,
@@ -265,6 +263,6 @@ class _MenuCounterWidgetState extends State<MenuCounterWidget> {
               ],
             ),
       )
-    )));
+    ));
   }
 }

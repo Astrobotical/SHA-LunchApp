@@ -10,8 +10,7 @@ class FoodStatus extends StatefulWidget {
 class _FoodStatusState extends State<FoodStatus> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Scaffold(
+    return  Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
           automaticallyImplyLeading: false,
@@ -35,7 +34,6 @@ class _FoodStatusState extends State<FoodStatus> {
             )
             
           )
-      )
-    );
+      );
   }
 }

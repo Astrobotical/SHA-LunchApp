@@ -6,6 +6,10 @@ sealed class SupportBlocEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
-class Onchanged extends SupportBlocEvent{
-  
-}
+
+class Onchanged extends SupportBlocEvent {}
+
+class OnFeedbackSubmit extends SupportBlocEvent {}
+
+class OnSubmit extends SupportBlocEvent {}
+class Successsubmit extends SupportBlocEvent{}

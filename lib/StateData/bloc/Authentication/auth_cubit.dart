@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hla/StateData/Models/Fooditems.dart';
@@ -24,6 +25,7 @@ class AuthCubit extends Cubit<AuthState> {
   late mainUser? loggedinuser;
   final googlesignIn = GoogleSignIn();
   String? AuthType;
+  final sharedpreferencesObject = SharedPreferences.getInstance();
   GoogleSignInAccount? CurrentGoogleUser;
   GoogleSignInAccount get user => CurrentGoogleUser!;
   TextEditingController EmailBox = TextEditingController();
@@ -38,12 +40,11 @@ class AuthCubit extends Cubit<AuthState> {
           ButtionState: ButtonState.success, AuthType: AuthType));
       var retrievedJsonrendered = jsonDecode(result.body);
       final Data = retrievedJsonrendered;
-      print(Data['Name']);
       PreferenceHelper.saveCredentials(
           name: Data['Name'],
           isStudent: Data['Status'] != 'Cook' ? true : false,
           id: Data["StudentID"].toString(),
-          Email: "Data['Email']");
+          Email: Data['Email']);
     }
   }
 
@@ -63,6 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthInitial(ButtionState: ButtonState.idle, AuthType: "null"));
     await Future.delayed(const Duration(seconds: 2));
     emit(AuthRefreshState(ButtionState: ButtonState.idle, AuthType: "null"));
+    AuthChecker();
   }
 
   Future appleLogin() async {
@@ -70,9 +72,29 @@ class AuthCubit extends Cubit<AuthState> {
     return await FirebaseAuth.instance.signInWithProvider(appleProvider);
   }
 
+  Future<void> userChecker(String email) async {
+    var prefs = await sharedpreferencesObject;
+    Response result = await api.accountPresent(email);
+    if (result.statusCode == 200) {
+      final body = jsonDecode(result.body);
+      prefs.setString("Email", body['UserEmail']);
+      prefs.setString("ID", body["UserStudentID"].toString());
+      prefs.setBool('isStudent', body['Status'] != 'Cook' ? true : false);
+    }
+  }
+
+  Future<void> AuthChecker() async {
+    final validateinstance = await SharedPreferences.getInstance();
+    String? ID = validateinstance.getString("ID");
+    print(ID);
+    if (ID != null) {
+      emit(AuthSuccessState(
+          ButtionState: ButtonState.success, AuthType: "null"));
+    }
+  }
+
   Future googleLogin() async {
     final googleUser = await googlesignIn.signIn();
-
     if (googleUser == null) return;
     CurrentGoogleUser = googleUser;
     final googleAuth = await googleUser.authentication;
@@ -81,36 +103,52 @@ class AuthCubit extends Cubit<AuthState> {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
-    return await FirebaseAuth.instance.signInWithCredential(creds);
+    await FirebaseAuth.instance.signInWithCredential(creds);
+    if (FirebaseAuth.instance.currentUser?.displayName != null) {
+      String? useremail = FirebaseAuth.instance.currentUser?.email;
+      await userChecker(useremail!);
+    }
   }
 
   Future googleLogout() async {
-    PreferenceHelper.clear();
     FirebaseAuth.instance.signOut();
   }
 
-  Future<void> Authenticateuser(String type) async {
-    final prefs = await SharedPreferences.getInstance();
-    // prefs.setString("AuthType", type);
-    PreferenceHelper.setAuthType(auth: type);
-    switch (type) {
+  Future logout() async {
+    final preferences = await SharedPreferences.getInstance();
+    String? getAuthtype = preferences.getString("AuthType");
+    preferences.remove("ID");
+    switch (getAuthtype) {
       case "Apple":
-        AuthType = "Apple";
+        preferences.clear();
         await appleLogin();
         break;
       case "Google":
-        AuthType = "Google";
-        googleLogin();
+        preferences.clear();
+        googleLogout();
         break;
       case "Api":
-        AuthType = "Api";
+        preferences.clear();
         await userLogin();
         break;
     }
   }
 
-  Future<void> init() async {}
+  Future<void> Authenticateuser(String type) async {
+    PreferenceHelper.setAuthType(auth: type);
+    switch (type) {
+      case "Apple":
+        await appleLogin();
+        break;
+      case "Google":
+        googleLogin();
+        break;
+      case "Api":
+        await userLogin();
+        break;
+    }
+  }
+
   Future<void> checker() async {
     statesucess();
     stateprogress();
@@ -122,21 +160,13 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> stateprogress() async {
-    //emit(AuthState(ButtionState: state.ButtionState = ButtonState.loading));
     emit(AuthLoading(
         ButtionState: state.ButtionState = ButtonState.loading,
         AuthType: "null"));
-
-    //statesucess();
-    // emit(AuthState(ButtionState: state.ButtionState = ButtonState.loading));
   }
 
   void statefail() {
     emit(AuthState(
         ButtionState: state.ButtionState = ButtonState.fail, AuthType: "null"));
-  }
-
-  void stateidle() {
-    //  buttonState.add(ButtonState.idle);
   }
 }

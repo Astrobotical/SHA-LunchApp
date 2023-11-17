@@ -11,9 +11,7 @@ class Requestinvoice extends StatefulWidget {
 class _RequestinvoiceState extends State<Requestinvoice> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    return Scaffold(
           backgroundColor: Colors.blue,
           appBar: AppBar(
             backgroundColor: Colors.blue,
@@ -91,7 +89,7 @@ class _RequestinvoiceState extends State<Requestinvoice> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: 'Order #: ',
+                                            text: 'Menu #: ',
                                             style:
                                                 TextStyle(color: Colors.blue),
                                           ),
@@ -114,32 +112,7 @@ class _RequestinvoiceState extends State<Requestinvoice> {
                                         style: TextStyle(fontSize: 15),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
-                                      child: Container(
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          border: Border.all(
-                                            color: Colors.blueGrey,
-                                            width: 2,
-                                          ),
-                                        ),
-                                        child: Align(
-                                          alignment:
-                                              AlignmentDirectional(0.00, 0.00),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    7, 0, 7, 0),
-                                            child: Text('2.5 lbs',
-                                                style: TextStyle(fontSize: 13)),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                   
                                   ],
                                 ),
                               ),
@@ -251,32 +224,7 @@ class _RequestinvoiceState extends State<Requestinvoice> {
                                         style: TextStyle(fontSize: 15),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
-                                      child: Container(
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          border: Border.all(
-                                            color: Colors.blueGrey,
-                                            width: 2,
-                                          ),
-                                        ),
-                                        child: Align(
-                                          alignment:
-                                              AlignmentDirectional(0.00, 0.00),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    7, 0, 7, 0),
-                                            child: Text('2.5 lbs',
-                                                style: TextStyle(fontSize: 13)),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                   
                                   ],
                                 ),
                               ),
@@ -331,6 +279,6 @@ class _RequestinvoiceState extends State<Requestinvoice> {
               ],
             ),
           ),
-        ));
+        );
   }
 }

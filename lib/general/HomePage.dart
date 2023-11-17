@@ -25,8 +25,7 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       raw = prefs.getString("Name");
-      if(raw != null )
-      {
+      if (raw != null) {
         List<String>? presplit = raw?.split(" ");
         Username = "${presplit![0]} .${presplit![1][0]}";
       }
@@ -39,46 +38,83 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final Cubitobj = context.read<AuthCubit>();
-    return BlocBuilder<AuthCubit, AuthState>(
-      builder: (context, state) {
-        switch (AuthType) {
-          case "Google":
-            if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
-              raw = FirebaseAuth.instance.currentUser!.displayName;
-              List<String>? presplit = raw?.split(" ");
-              Username = "${presplit![0]} .${presplit![1][0]}";
-            }
-            break;
-          case "Apple":
-            break;
-          case "Api":
+    return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+      switch (AuthType) {
+        case "Google":
+          if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
+            raw = FirebaseAuth.instance.currentUser!.displayName;
+            List<String>? presplit = raw?.split(" ");
+            Username = "${presplit![0]} .${presplit![1][0]}";
+          }
           break;
-        }
-        return Container(
-            margin: EdgeInsets.only(top: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Welcome Back ${Username}',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontFamily: 'Plus Jakarta Sans',
-                            color: Color(0xFF14181B),
-                            fontSize: 28,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ))
-              ],
-            ));
-      },
-    );
+        case "Apple":
+          break;
+        case "Api":
+          break;
+      }
+      return Stack(
+        children: [
+          Container(
+              child: Image.asset(
+            'assets/logos/homescreenbackground.webp',
+            height: MediaQuery.sizeOf(context).height,
+            width: double.infinity,
+            fit: BoxFit.fitWidth,
+          )),
+          Align(
+              alignment: Alignment.topRight,
+              child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: 
+                  Column(
+                    mainAxisAlignment:MainAxisAlignment.end,
+                    children: [
+                      Gap(40),
+                      Text(
+                    'Welcome Back',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      color: Colors.white,
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '${Username}',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  Gap(10),
+                  Text(
+                    'Pick your meal  at ease!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    )
+                  )
+                  ,
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                    ),
+                    onPressed: (){
+
+                    }, child: 
+                    const Text("ORDER NOW",style: TextStyle(color: Colors.black,fontSize: 18),)
+                    )
+                    ],
+                  )
+              )
+          )
+                  
+        ],
+      );
+    });
   }
 }
