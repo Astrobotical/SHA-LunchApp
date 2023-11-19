@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
@@ -94,7 +93,6 @@ class ApiClient {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      
     );
     return response;
   }
@@ -148,25 +146,29 @@ class ApiClient {
 
   Future<Response> accountPresent(String email) async {
     final response = await http.post(
-      Uri.parse("https://api.romarioburke.com/api/v1/auth/hasaccount"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        Uri.parse("https://api.romarioburke.com/api/v1/auth/hasaccount"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
           'Email': email,
         }));
     return response;
   }
-  Future<Response> cartCheckout(List<Map<String, Object?>> data,String menuID,String studentID ) async{
-    final response = await http.post(Uri.parse("https://api.romarioburke.com/api/v1"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+
+  Future<Response> cartCheckout(
+       data, String menuID, String studentID) async {
+    print(data);
+    final response = await http.post(
+        Uri.parse("https://api.romarioburke.com/api/v1/cart/checkout"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, Object>{
           'StudentID': studentID,
           'MenuID': menuID,
-          'Data' : data
+          'Data': json.encode(data)
         }));
-        return  response;
+    return response;
   }
 }

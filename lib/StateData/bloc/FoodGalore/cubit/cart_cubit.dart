@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 import 'dart:ffi';
 
@@ -61,18 +63,23 @@ class CartCubit extends Cubit<CartState> {
     final List<Map<String, Object?>> queryResult = await DBHandle.getCart();
     final List<Map<String, Object?>> data =
         List.generate(queryResult.length, (index) {
-      return <String, Object?>{
-        'MainDishID': queryResult[index]['FoodID'],
-        'SideDishID': queryResult[index]['SideID'],
-        'Category': queryResult[index]['FoodCategory'],
+      return <String, dynamic?>{
+        "MainDishID": '${queryResult[index]['FoodID']}',
+        "SideDishID": '${queryResult[index]['SideID']}',
+        "Category": '${queryResult[index]['FoodCategory']}'
       };
     });
+    var parseddata = jsonEncode(data);
+   
+    //var json = jsonEncode(data, toEncodable: (e)=> e.toJsonAttr())
     final prefs = await SharedPreferences.getInstance();
     String? menu = prefs.getString('MenuID');
     String? StudentID = prefs.getString('ID');
-    Response result = await api.cartCheckout(data, menu!, StudentID!);
-    if(result.statusCode == 200){
 
+    Response result = await api.cartCheckout(parseddata, menu!, StudentID!);
+    if (result.statusCode == 200) {
+    } else {
+      print('there was an error,${result.statusCode}');
     }
   }
 }

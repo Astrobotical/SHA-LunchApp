@@ -41,6 +41,9 @@ class _CartState extends State<Cart> {
                           fontWeight: FontWeight.bold))),
               Gap(10),
               BlocBuilder<CartCubit, CartState>(builder: (context, state) {
+                if (state is CartCheckoutSuccess) {
+                  _showSuccess();
+                }
                 if (state is CartPopulateDone) {
                   SizedBox(
                       height: 720,
@@ -109,16 +112,42 @@ class _CartState extends State<Cart> {
                               child: Text("Loading ",
                                   style: TextStyle(fontSize: 20)));
                         })));
-              } 
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                    ),
-                    onPressed: (){
-
-                  }
-                  , child: const Text("Checkout", style: TextStyle(fontSize: 18),))
+              }),
+              ElevatedButton(
+                  style: ButtonStyle(),
+                  onPressed: () {
+                    methodobj.checkout();
+                  },
+                  child: const Text(
+                    "Checkout",
+                    style: TextStyle(fontSize: 18),
+                  ))
             ]));
+  }
+
+  _showSuccess() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.green,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Checkout Success"),
+        ],
+      ),
+    );
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 4),
+    );
   }
 }
 
