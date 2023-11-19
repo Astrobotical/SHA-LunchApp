@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static Database? _database;
-  static const String tableName = 'CheckoutCart';
+  static const String tableName = 'BigChart';
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -13,12 +13,12 @@ class DatabaseHelper {
 
   Future<Database> initDB() async {
     final path = await getDatabasesPath();
-    final dbPath = join(path, 'mycart.db');
+    final dbPath = join(path, 'soldier.db');
 
     return await openDatabase(dbPath, version: 1,
         onCreate: (db, version) async {
       await db.execute(
-          'CREATE TABLE IF NOT EXISTS $tableName(AIN INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,FoodName TEXT, FoodImage TEXT, SideFoodName TEXT, SideFoodImage TEXT, SideID TEXT, FoodID TEXT, MenuID TEXT, FoodCategory TEXT)');
+          'CREATE TABLE IF NOT EXISTS $tableName(AIN INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,FoodName TEXT, FoodImage TEXT, SideFoodName TEXT, SideFoodImage TEXT, SideID TEXT, FoodID TEXT, MenuID TEXT,FoodCategory TEXT)');
     });
   }
 
@@ -39,9 +39,10 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> deleteItem(int id) async {
+  Future<int> deleteItem(int? id) async {
     final db = await database;
-    await db.delete(tableName, where: 'AIN = ?', whereArgs: [id]);
+   return await db.delete(tableName, 
+    where: 'AIN = ?', whereArgs: [id]);
   }
 
   Future<List<Map<String, dynamic>>> getCart() async {

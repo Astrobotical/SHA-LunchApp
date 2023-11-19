@@ -15,3 +15,4 @@ final class Cartloading extends CartState{}
 final class CartPopulate extends CartState {}
 
 final class CartPopulateDone extends CartState {}
+final class CartDeleteSuccess extends CartState{}

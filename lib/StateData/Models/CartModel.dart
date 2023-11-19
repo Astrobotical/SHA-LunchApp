@@ -4,7 +4,7 @@ import 'dart:convert';
 class CartModel {
   String MenuID;
 
-  String FoodID;
+  String FoodID;  
   String FoodName;
   String FoodImage;
 
@@ -12,6 +12,7 @@ class CartModel {
   String SideFoodName;
   String SideFoodImage;
   String FoodCategory;
+  int? AIN; 
   CartModel({
     required this.MenuID,
     required this.FoodID,
@@ -21,6 +22,7 @@ class CartModel {
     required this.SideFoodName,
     required this.SideFoodImage,
     required this.FoodCategory,
+    this.AIN,
   });
 
   CartModel copyWith({
@@ -32,6 +34,7 @@ class CartModel {
     String? SideFoodName,
     String? SideFoodImage,
     String? FoodCategory,
+    int? AIN,
   }) {
     return CartModel(
       MenuID: MenuID ?? this.MenuID,
@@ -42,6 +45,7 @@ class CartModel {
       SideFoodName: SideFoodName ?? this.SideFoodName,
       SideFoodImage: SideFoodImage ?? this.SideFoodImage,
       FoodCategory: FoodCategory ?? this.FoodCategory,
+      AIN: AIN ?? this.AIN,
     );
   }
 
@@ -55,6 +59,7 @@ class CartModel {
       'SideFoodName': SideFoodName,
       'SideFoodImage': SideFoodImage,
       'FoodCategory': FoodCategory,
+      'AIN': AIN,
     };
   }
 
@@ -68,6 +73,7 @@ class CartModel {
       SideFoodName: map['SideFoodName'] as String,
       SideFoodImage: map['SideFoodImage'] as String,
       FoodCategory: map['FoodCategory'] as String,
+      AIN: map['AIN'] != null ? map['AIN'] as int : null,
     );
   }
 
@@ -77,7 +83,7 @@ class CartModel {
 
   @override
   String toString() {
-    return 'CartModel(MenuID: $MenuID, FoodID: $FoodID, FoodName: $FoodName, FoodImage: $FoodImage, SideID: $SideID, SideFoodName: $SideFoodName, SideFoodImage: $SideFoodImage, FoodCategory: $FoodCategory)';
+    return 'CartModel(MenuID: $MenuID, FoodID: $FoodID, FoodName: $FoodName, FoodImage: $FoodImage, SideID: $SideID, SideFoodName: $SideFoodName, SideFoodImage: $SideFoodImage, FoodCategory: $FoodCategory, AIN: $AIN)';
   }
 
   @override
@@ -92,7 +98,8 @@ class CartModel {
       other.SideID == SideID &&
       other.SideFoodName == SideFoodName &&
       other.SideFoodImage == SideFoodImage &&
-      other.FoodCategory == FoodCategory;
+      other.FoodCategory == FoodCategory &&
+      other.AIN == AIN;
   }
 
   @override
@@ -104,6 +111,7 @@ class CartModel {
       SideID.hashCode ^
       SideFoodName.hashCode ^
       SideFoodImage.hashCode ^
-      FoodCategory.hashCode;
+      FoodCategory.hashCode ^
+      AIN.hashCode;
   }
 }

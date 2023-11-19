@@ -157,4 +157,16 @@ class ApiClient {
         }));
     return response;
   }
+  Future<Response> cartCheckout(List<Map<String, Object?>> data,String menuID,String studentID ) async{
+    final response = await http.post(Uri.parse("https://api.romarioburke.com/api/v1"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, Object>{
+          'StudentID': studentID,
+          'MenuID': menuID,
+          'Data' : data
+        }));
+        return  response;
+  }
 }

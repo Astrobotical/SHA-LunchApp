@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hla/StateData/Models/MenuItemModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../ApiClient.dart';
 part 'food_state.dart';
@@ -19,8 +20,9 @@ class FoodCubit extends Cubit<FoodState> {
   Future<void> initialize(String Category) async {
     Response result = await api.getActiveMenu();
     if (result.statusCode == 200) {
-      //  emit(FoodLoading());
-      //  getFood(Category);
+      final body = jsonDecode(result.body);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString("MenuID", body['ActiveMenu']);
     } else {
       emit(Foodempty());
     }
@@ -42,7 +44,6 @@ class FoodCubit extends Cubit<FoodState> {
   }
 
   Future<List<dynamic>> getActiveMenu() async {
-    
     return Future.value([]);
   }
 

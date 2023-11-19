@@ -20,10 +20,11 @@ class CurrentMenu extends StatefulWidget {
 
 class _CurrentMenuState extends State<CurrentMenu> {
   late FoodCubit CurrentContext;
+  @override
   void initState() {
     super.initState();
     CurrentContext = BlocProvider.of<FoodCubit>(context);
-    Future.delayed(Duration(seconds: 3), () async {
+    Future.delayed(const Duration(seconds: 3), () async {
       await CurrentContext.initialize(widget.MenuType);
     });
   }
@@ -33,7 +34,7 @@ class _CurrentMenuState extends State<CurrentMenu> {
     return SingleChildScrollView(
         child: Container(
             height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.only(bottom: 30),
+            margin: const EdgeInsets.only(bottom: 30),
             child: Column(children: [
               BlocBuilder<FoodCubit, FoodState>(builder: (context, state) {
                 if (state is Foodempty) {
@@ -79,12 +80,12 @@ class _CurrentMenuState extends State<CurrentMenu> {
                                   */
                                 },
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       16, 16, 16, 0),
                                   child: Container(
                                     width: double.infinity,
                                     child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                      padding:const EdgeInsetsDirectional.fromSTEB(
                                           12, 12, 12, 12),
                                       child: Stack(children: [
                                         Container(
@@ -98,7 +99,7 @@ class _CurrentMenuState extends State<CurrentMenu> {
                                           child: Stack(
                                             children: [
                                               Padding(
-                                                padding: EdgeInsetsDirectional
+                                                padding: const EdgeInsetsDirectional
                                                     .fromSTEB(8, 8, 8, 8),
                                                 child: ClipRRect(
                                                   borderRadius:
@@ -114,8 +115,8 @@ class _CurrentMenuState extends State<CurrentMenu> {
                                               Align(
                                                 alignment: Alignment.bottomLeft,
                                                 child: Container(
-                                                  padding: EdgeInsets.all(10),
-                                                  margin: EdgeInsets.only(
+                                                  padding: const EdgeInsets.all(10),
+                                                  margin: const EdgeInsets.only(
                                                       left: 20, bottom: 15),
                                                   decoration: BoxDecoration(
                                                     borderRadius:
