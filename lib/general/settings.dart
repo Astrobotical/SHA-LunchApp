@@ -19,6 +19,7 @@ class _SettingsState extends State<Settings> {
   String? raw;
   String? Username;
   String? Email = "Yes";
+  bool isImageSet = false;
 
   void initState() {
     _loadCounter();
@@ -31,6 +32,7 @@ class _SettingsState extends State<Settings> {
       Username = prefs.getString("Name");
       isStudent = prefs.getBool("isStudent");
       Email = prefs.getString("Email");
+      isImageSet =  true;
       isStudentSetter = isStudent!;
       Future.delayed(const Duration(seconds: 1), () async {
         AuthType = await PreferenceHelper.getValueByKey(key: "AuthType");
@@ -88,12 +90,19 @@ class _SettingsState extends State<Settings> {
                       padding: EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
+                        child:isImageSet ?
+                        Image.network(
                           "https://ui-avatars.com/api/?name=${Username}",
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
                           fit: BoxFit.cover,
-                        ),
+                        ):
+                            Image.network('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+                            width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                                fit: BoxFit.cover,
+                            )
+
                       ),
                     ),
                   ),
@@ -111,12 +120,16 @@ class _SettingsState extends State<Settings> {
                                 color: Colors.white)),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                          child: Text('$Email',
+                          child: 
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child:Text('$Email',
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white)),
                         ),
+                        )
                       ],
                     ),
                   ),

@@ -8,6 +8,8 @@ import 'package:hla/StateData/bloc/student/bloc/support_bloc_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../general/Parent.dart';
+
 class SupportWidget extends StatefulWidget {
   const SupportWidget({super.key});
 
@@ -17,7 +19,7 @@ class SupportWidget extends StatefulWidget {
 
 class _SupportWidgetState extends State<SupportWidget> {
   String? StudentID;
-  late FToast fToast;
+    late FToast fToast;
   @override
   void initState() {
     fToast = FToast();
@@ -47,7 +49,11 @@ class _SupportWidgetState extends State<SupportWidget> {
               automaticallyImplyLeading: false,
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context, MaterialPageRoute(
+                      builder: (context) => Parent()
+                  )
+                  );
                 },
                 icon: Icon(
                   Icons.arrow_back_rounded,

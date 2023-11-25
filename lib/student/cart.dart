@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:hla/StateData/Models/CartModel.dart';
 import 'package:hla/StateData/bloc/FoodGalore/cubit/cart_cubit.dart';
+import 'package:hla/StateData/bloc/parent_cubit.dart';
+import 'package:hla/general/Parent.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -27,6 +29,7 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     final methodobj = context.read<CartCubit>();
+    final ParentObject = context.read<ParentCubit>();
     return Container(
         width: MediaQuery.sizeOf(context).width,
         child: Column(
@@ -46,7 +49,7 @@ class _CartState extends State<Cart> {
                 }
                 if (state is CartPopulateDone) {
                   SizedBox(
-                      height: 720,
+                      height: MediaQuery.sizeOf(context).height,
                       width: MediaQuery.sizeOf(context).width,
                       child: FutureBuilder(
                           future: methodobj.getItems(),
@@ -61,6 +64,7 @@ class _CartState extends State<Cart> {
                                 snapshot.connectionState ==
                                     ConnectionState.done) {
                               return ListView.builder(
+                                controller: ParentObject.scrollController,
                                   shrinkWrap: true,
                                   itemCount: snapshot.data!.length,
                                   itemBuilder: (context, index) {
@@ -76,7 +80,7 @@ class _CartState extends State<Cart> {
                           })));
                 }
                 return SizedBox(
-                    height: 720,
+                    height: MediaQuery.sizeOf(context).height,
                     width: MediaQuery.sizeOf(context).width,
                     child: FutureBuilder(
                         future: methodobj.getItems(),
@@ -99,7 +103,10 @@ class _CartState extends State<Cart> {
                               snapshot.connectionState ==
                                   ConnectionState.done) {
                             return ListView.builder(
+                              controller: ParentObject.scrollController,
                                 shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                physics: NeverScrollableScrollPhysics(),
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (context, index) {
                                   return Listitem(
@@ -114,14 +121,15 @@ class _CartState extends State<Cart> {
                         })));
               }),
               ElevatedButton(
-                  style: ButtonStyle(),
-                  onPressed: () {
-                    methodobj.checkout();
+
+                  onPressed:  ()async  {
+                   await  methodobj.checkout();
                   },
                   child: const Text(
                     "Checkout",
                     style: TextStyle(fontSize: 18),
-                  ))
+                  )),
+              Gap(30),
             ]));
   }
 
@@ -132,7 +140,7 @@ class _CartState extends State<Cart> {
         borderRadius: BorderRadius.circular(25.0),
         color: Colors.green,
       ),
-      child: Row(
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.check),

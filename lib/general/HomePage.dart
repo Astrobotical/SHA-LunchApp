@@ -17,8 +17,9 @@ class _HomePageState extends State<HomePage> {
   String? raw;
   String? Username;
   void initState() {
-    super.initState();
     _loadCounter();
+    super.initState();
+
   }
 
   void _loadCounter() async {
@@ -28,10 +29,32 @@ class _HomePageState extends State<HomePage> {
       if (raw != null) {
         List<String>? presplit = raw?.split(" ");
         Username = "${presplit![0]} .${presplit![1][0]}";
-      }
+      }else if(FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty){
+        String? Name = FirebaseAuth.instance.currentUser!.displayName;
+        prefs.setString("Name", Name!);
+        raw = Name!;
+        List<String>? presplit = raw?.split(" ");
+        Username = "${presplit![0]} .${presplit![1][0]}";
+      }/*
       Future.delayed(const Duration(seconds: 1), () async {
         AuthType = await PreferenceHelper.getValueByKey(key: "AuthType");
+        switch (AuthType) {
+          case "Google":
+            if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
+              setState(() {
+                raw = FirebaseAuth.instance.currentUser!.displayName;
+                List<String>? presplit = raw?.split(" ");
+                Username = "${presplit![0]} .${presplit![1][0]}";
+              });
+            }
+            break;
+          case "Apple":
+            break;
+          case "Api":
+            break;
+        }
       });
+      */
     });
   }
 
@@ -39,19 +62,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final Cubitobj = context.read<AuthCubit>();
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-      switch (AuthType) {
-        case "Google":
-          if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
-            raw = FirebaseAuth.instance.currentUser!.displayName;
-            List<String>? presplit = raw?.split(" ");
-            Username = "${presplit![0]} .${presplit![1][0]}";
-          }
-          break;
-        case "Apple":
-          break;
-        case "Api":
-          break;
-      }
+
       return Stack(
         children: [
           Container(

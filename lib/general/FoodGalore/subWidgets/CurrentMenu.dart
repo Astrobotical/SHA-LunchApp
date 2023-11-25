@@ -10,6 +10,8 @@ import 'package:hla/StateData/bloc/FoodGalore/cubit/cart_cubit.dart';
 import 'package:hla/StateData/bloc/FoodGalore/cubit/food_cubit.dart';
 import 'package:swipe_to/swipe_to.dart';
 
+import '../../../StateData/bloc/parent_cubit.dart';
+
 class CurrentMenu extends StatefulWidget {
   const CurrentMenu({super.key, required this.MenuType});
 
@@ -31,11 +33,13 @@ class _CurrentMenuState extends State<CurrentMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final ParentObject = context.read<ParentCubit>();
     return SingleChildScrollView(
         child: Container(
             height: MediaQuery.of(context).size.height,
             margin: const EdgeInsets.only(bottom: 30),
             child: Column(children: [
+
               BlocBuilder<FoodCubit, FoodState>(builder: (context, state) {
                 if (state is Foodempty) {
                   return Center(
@@ -56,6 +60,7 @@ class _CurrentMenuState extends State<CurrentMenu> {
                           return Text('Error found - ${snapped.error}');
                         }
                         return ListView.builder(
+                          controller: ParentObject.scrollController ,
                             padding: EdgeInsets.only(
                                 bottom: kBottomNavigationBarHeight + 15.0),
                             shrinkWrap: true,

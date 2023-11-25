@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../general/Parent.dart';
+
 class QrScanner extends StatefulWidget {
   const QrScanner({super.key});
 
@@ -17,7 +19,11 @@ class _QrScannerState extends State<QrScanner> {
           automaticallyImplyLeading: false,
           leading: IconButton(
                 onPressed: () {
-                   Navigator.pop(context);
+                  Navigator.push(
+                      context, MaterialPageRoute(
+                      builder: (context) => Parent()
+                  )
+                  );
                 },
     icon: Icon(
       Icons.arrow_back_rounded,

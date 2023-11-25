@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
+import 'package:hla/StateData/bloc/Authentication/registration_cubit.dart';
 import 'package:hla/StateData/bloc/FoodGalore/cubit/cart_cubit.dart';
 import 'package:hla/StateData/bloc/FoodGalore/cubit/food_cubit.dart';
+import 'package:hla/StateData/bloc/FoodGalore/cubit/invoices_cubit.dart';
 import 'package:hla/StateData/bloc/student/bloc/cubit/support_cubit_cubit.dart';
 import 'package:hla/StateData/bloc/student/bloc/support_bloc_bloc.dart';
 import 'package:hla/general/Auth/main.dart';
@@ -24,7 +26,7 @@ import 'package:hla/cooks/menuCounter.dart';
 import 'package:hla/cooks/invoiceRequestor.dart';
 import 'package:hla/cooks/menuQrCodeGenerator.dart';
 import 'package:hla/StateData/bloc/CubitObserver.dart';
-
+import 'package:hla/StateData/bloc/parent_cubit.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -32,14 +34,23 @@ Future<void> main() async {
   );
   runApp(MultiBlocProvider(
     providers: [
-    BlocProvider<AuthCubit>(
+      BlocProvider(
+        create: (context)=> ParentCubit()),
+      BlocProvider<AuthCubit>(
       create: (context) => AuthCubit()),
       BlocProvider<SupportCubitCubit>(
         create: (context)=> SupportCubitCubit()..init()),
       BlocProvider<FoodCubit>(
           create: (context)=>FoodCubit()),
-          BlocProvider<CartCubit>(
-            create: (context)=>CartCubit()..startup())
+      BlocProvider<CartCubit>(
+            create: (context)=>CartCubit()..startup()),
+      BlocProvider<InvoicesCubit>(
+        create: (context)=>InvoicesCubit()
+      ),
+      BlocProvider<RegistrationCubit>(
+          create: (context)=>RegistrationCubit()
+      ),
+
   ], child: const MainAuth()));
   Bloc.observer = CubitObserver();
 }
@@ -51,19 +62,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(
@@ -75,16 +74,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({required this.title}) : super(key: Key(title));
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -104,16 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
         appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
         body: Center(

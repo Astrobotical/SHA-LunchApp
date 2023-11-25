@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../general/Parent.dart';
+
 class FoodStatus extends StatefulWidget {
   const FoodStatus({super.key});
 
@@ -16,7 +18,11 @@ class _FoodStatusState extends State<FoodStatus> {
           automaticallyImplyLeading: false,
           leading: IconButton(
                 onPressed: () {
-                   Navigator.pop(context);
+                  Navigator.push(
+                      context, MaterialPageRoute(
+                      builder: (context) => Parent()
+                  )
+                  );
                 },
                 icon: Icon(
                   Icons.arrow_back_rounded,

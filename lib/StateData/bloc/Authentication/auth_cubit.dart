@@ -30,7 +30,11 @@ class AuthCubit extends Cubit<AuthState> {
   GoogleSignInAccount get user => CurrentGoogleUser!;
   TextEditingController EmailBox = TextEditingController();
   TextEditingController Password = TextEditingController();
+  Future<void> userApiRegister() async{
+    emit(AuthLoading(ButtionState: ButtonState.loading, AuthType: "null"));
+    AuthType = "Api";
 
+  }
   Future<void> userApiLogin() async {
     emit(AuthLoading(ButtionState: ButtonState.loading, AuthType: "null"));
     AuthType = "Api";
@@ -59,7 +63,18 @@ class AuthCubit extends Cubit<AuthState> {
     }
     userApiLogin();
   }
-
+  void canRegister() async{
+    print("Was preseed");
+    if (EmailBox.text.isEmpty) {
+      emit(AuthErrorState("The Student ID Box can't be empty"));
+      return;
+    }else if (Password.text.isEmpty) {
+      emit(AuthErrorState("Password Box can't be empty "));
+      return;
+    }else{
+      emit(AuthRegisterContinue(ButtionState: ButtonState.loading, AuthType: "null"));
+    }
+  }
   Future<void> initialize() async {
     emit(AuthInitial(ButtionState: ButtonState.idle, AuthType: "null"));
     await Future.delayed(const Duration(seconds: 2));
@@ -79,7 +94,8 @@ class AuthCubit extends Cubit<AuthState> {
       final body = jsonDecode(result.body);
       prefs.setString("Email", body['UserEmail']);
       prefs.setString("ID", body["UserStudentID"].toString());
-      prefs.setBool('isStudent', body['Status'] != 'Cook' ? true : false);
+      bool Student = body['UserRole'] != 'Cook' ? true : false;
+      prefs.setBool('isStudent',Student);
     }
   }
 
@@ -104,10 +120,6 @@ class AuthCubit extends Cubit<AuthState> {
       idToken: googleAuth.idToken,
     );
     await FirebaseAuth.instance.signInWithCredential(creds);
-    if (FirebaseAuth.instance.currentUser?.displayName != null) {
-      String? useremail = FirebaseAuth.instance.currentUser?.email;
-      await userChecker(useremail!);
-    }
   }
 
   Future googleLogout() async {
@@ -133,7 +145,15 @@ class AuthCubit extends Cubit<AuthState> {
         break;
     }
   }
-
+  void CustomAuth(String authtType)async {
+    switch(authtType){
+      case 'Login':
+        await userLogin();
+        break;
+      case 'Registration':
+        break;
+    }
+  }
   Future<void> Authenticateuser(String type) async {
     PreferenceHelper.setAuthType(auth: type);
     switch (type) {
@@ -153,7 +173,6 @@ class AuthCubit extends Cubit<AuthState> {
     statesucess();
     stateprogress();
   }
-
   void statesucess() {
     emit(AuthSuccessState(
         ButtionState: ButtonState.success, AuthType: AuthType));
@@ -161,12 +180,12 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> stateprogress() async {
     emit(AuthLoading(
-        ButtionState: state.ButtionState = ButtonState.loading,
+        ButtionState: ButtonState.loading,
         AuthType: "null"));
   }
 
   void statefail() {
     emit(AuthState(
-        ButtionState: state.ButtionState = ButtonState.fail, AuthType: "null"));
+        ButtionState: ButtonState.fail, AuthType: "null"));
   }
 }

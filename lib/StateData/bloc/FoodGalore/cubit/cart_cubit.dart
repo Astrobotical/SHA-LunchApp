@@ -59,6 +59,16 @@ class CartCubit extends Cubit<CartState> {
     emit(CartPopulateDone());
   }
 
+  deleteAll() async {
+    Database db = await DBHandle.database;
+    return await db.rawDelete("Delete  from BigChart");
+  }
+
+  transit() async {
+    await deleteAll();
+    emit(CartPopulateDone());
+  }
+
   Future<void> checkout() async {
     final List<Map<String, Object?>> queryResult = await DBHandle.getCart();
     final List<Map<String, Object?>> data =
@@ -70,14 +80,15 @@ class CartCubit extends Cubit<CartState> {
       };
     });
     var parseddata = jsonEncode(data);
-   
-    //var json = jsonEncode(data, toEncodable: (e)=> e.toJsonAttr())
     final prefs = await SharedPreferences.getInstance();
     String? menu = prefs.getString('MenuID');
     String? StudentID = prefs.getString('ID');
-
     Response result = await api.cartCheckout(parseddata, menu!, StudentID!);
     if (result.statusCode == 200) {
+      await transit();
+      print(result.body);
+    } else if (result.statusCode == 500) {
+      print(result.body);
     } else {
       print('there was an error,${result.statusCode}');
     }

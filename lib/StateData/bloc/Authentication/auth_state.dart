@@ -38,3 +38,9 @@ class AuthRefreshState extends AuthState {
   @override
   bool operator ==(Object other) => false;
 }
+class AuthRegisterContinue extends AuthState{
+  AuthRegisterContinue({required super.ButtionState,required super.AuthType});
+
+@override
+bool operator ==(Object other) => false;
+}

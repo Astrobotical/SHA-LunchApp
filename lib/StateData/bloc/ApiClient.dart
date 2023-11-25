@@ -14,9 +14,7 @@ class ApiClient {
             <String, String>{'StudentID': studentID, 'Password': password}));
     return response;
   }
-
-  Future<Response> userRegistration(String name, String email, String status,
-      String studentID, String password) async {
+  Future<Response> userRegistration(String name, String email, String status, String studentID, String password) async {
     final response = await http.post(
         Uri.parse("https://api.romarioburke.com/api/v1/auth/register"),
         headers: <String, String>{
@@ -156,18 +154,52 @@ class ApiClient {
     return response;
   }
 
-  Future<Response> cartCheckout(
-       data, String menuID, String studentID) async {
-    print(data);
+  Future<Response> cartCheckout(data, String menuID, String studentID) async {
+    //print(data);
+    final item = jsonDecode(data);
+    Map<String, dynamic> test = {
+      "StudentID": studentID,
+      "MenuID": menuID,
+      "Data": item
+    };
+    print(test);
     final response = await http.post(
         Uri.parse("https://api.romarioburke.com/api/v1/cart/checkout"),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body:
+         jsonEncode(<String, Object>{
+          'StudentID': studentID,
+          'MenuID': menuID,
+          'Data': item
+        }) );
+    return response;
+  }
+
+  Future<Response>  getInvoices(String studentID) async {
+    final response = await http.post(
+        Uri.parse("https://api.romarioburke.com/api/v1/invoices/getinvoice"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, Object>{
           'StudentID': studentID,
-          'MenuID': menuID,
-          'Data': json.encode(data)
+        }));
+    return response;
+  }
+
+  Future<Response> requestInvoice(
+    String invoiceID,
+  ) async {
+    final response = await http.post(
+        Uri.parse(
+            "https://api.romarioburke.com/api/v1/invoices/requestinvoice"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, Object>{
+          'InvoiceID': invoiceID,
         }));
     return response;
   }

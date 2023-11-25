@@ -1,8 +1,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:hidable/hidable.dart';
 import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
+import 'package:hla/StateData/bloc/parent_cubit.dart';
 import 'package:hla/general/Auth/main.dart';
 import 'package:hla/general/routes.dart';
 import 'package:hla/general/settings.dart';
@@ -37,20 +40,21 @@ class ParentBody extends StatefulWidget {
 
 class _ParentBodyState extends State<ParentBody> {
   late bool? isStudent;
-  bool isStudentSetter = false;
+  bool isStudentSetter = true;
+  late AuthCubit methodobj;
   void initState() {
-    _loadCounter();
+    methodobj = BlocProvider.of<AuthCubit>(context);
+    _ifLoggedin();
     super.initState();
   }
-
-  _loadCounter() async {
+  _ifLoggedin() async{
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isStudent = prefs.getBool("isStudent");
-      isStudentSetter = isStudent!;
-    });
+    if (FirebaseAuth.instance.currentUser?.displayName != null) {
+      String? useremail = FirebaseAuth.instance.currentUser?.email;
+       await methodobj.userChecker(useremail!);
+    }
+    setState(() {isStudentSetter = prefs.getBool("isStudent")!;});
   }
-
   final List<Widget> _StudentOptions = [
     HomePage(),
     FoodCatalog(),
@@ -72,15 +76,10 @@ class _ParentBodyState extends State<ParentBody> {
   bool isCartEmpty = true;
   Color BGC = Color.fromRGBO(104, 93, 156, 1);
 
-  void studentcheck() async {
-    Future.delayed(const Duration(seconds: 1), () async {
-      isStudent = (await PreferenceHelper.getValueByKeyBool(key: "isStudent"))!;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final Cubitobj = context.read<AuthCubit>();
+    final ParentObject = context.read<ParentCubit>();
     return Scaffold(
             backgroundColor: BGC,
             body: SingleChildScrollView(
@@ -89,27 +88,33 @@ class _ParentBodyState extends State<ParentBody> {
                   ? _StudentOptions[currentIndex]
                   : _CooksOptions[currentIndex],
             ),
-            bottomNavigationBar: isStudentSetter
+            bottomNavigationBar: Hidable(
+              controller: ParentObject.scrollController,
+                 child:
+            isStudentSetter
                 ? CurvedNavigationBar(
                     backgroundColor: BGC,
                     color: Color.fromRGBO(244, 244, 244, 4),
                     items: <Widget>[
                       Icon(Icons.home_outlined, size: 30),
                       Icon(Icons.fastfood_outlined, size: 30),
-                      isCartEmpty
-                          ? Icon(Icons.shopping_cart_outlined, size: 30)
-                          : badges.Badge(
+                      BlocBuilder<ParentCubit,ParentState>(
+                        builder: (context, state) {
+                          return
+                            ParentObject.isCartEmpty
+                                ? Icon(Icons.shopping_cart_outlined, size: 30)
+                                : badges.Badge(
                               position: badges.BadgePosition.topEnd(
                                   top: -10, end: -12),
                               showBadge: true,
                               ignorePointer: false,
                               onTap: () {},
-                              badgeContent: Text('1',
+                              badgeContent: Text('${ParentObject.cartCount}',
                                   style: TextStyle(color: Colors.white)),
                               badgeAnimation: badges.BadgeAnimation.rotation(
                                 animationDuration: Duration(seconds: 1),
                                 colorChangeAnimationDuration:
-                                    Duration(seconds: 1),
+                                Duration(seconds: 1),
                                 loopAnimation: false,
                                 curve: Curves.fastOutSlowIn,
                                 colorChangeAnimationCurve: Curves.easeInCubic,
@@ -130,8 +135,10 @@ class _ParentBodyState extends State<ParentBody> {
                                 elevation: 0,
                               ),
                               child:
-                                  Icon(Icons.shopping_cart_outlined, size: 30),
-                            ),
+                              Icon(Icons.shopping_cart_outlined, size: 30),
+                            );
+                        }),
+
                       Icon(Icons.settings_outlined, size: 30),
                       Icon(Icons.logout_outlined, size: 30)
                     ],
@@ -232,6 +239,6 @@ class _ParentBodyState extends State<ParentBody> {
                           }
                           break;
                       }
-                    }));
+                    })));
   }
 }
