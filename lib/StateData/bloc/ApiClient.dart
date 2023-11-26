@@ -120,26 +120,25 @@ class ApiClient {
     return response;
   }
 
-  Future<StreamedResponse> addMenuItem(String filelocation, String foodName,
+  Future<Response> addMenuItem(String foodImage, String foodName,
       String category, String studentType, String mealType) async {
     Map<String, String> headers = {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'application/json; charset=UTF-8',
     };
-    Map<String, String> body = {
+    Map<String, Object> body = {
       'Item_id': DateTime.now().millisecondsSinceEpoch.toString(),
       'Item_category': category,
       'Item_description': "filler",
       'Item_Target': studentType,
       'Side_Target': mealType,
       'Item_name': foodName,
+      'Item_image': foodImage
     };
-    final response = await http.MultipartRequest(
-        'POST', Uri.parse("https://api.romarioburke.com/api/v1/Items/Additem"))
-      ..fields.addAll(body)
-      ..headers.addAll(headers)
-      ..files
-          .add(await http.MultipartFile.fromPath('Item_image', filelocation));
-    return response.send();
+    final response = await http.post(Uri.parse("https://api.romarioburke.com/api/v1/Items/Additem"),
+    headers: headers,
+      body: jsonEncode(body),
+    );
+    return response;
   }
 
   Future<Response> accountPresent(String email) async {

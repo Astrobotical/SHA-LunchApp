@@ -69,6 +69,8 @@ dependencies:
   sqflite: ^2.3.0
   fluttertoast: ^8.2.4
   hidable: ^1.0.6
+  qr_code_scanner: ^1.0.1
+  lottie: ^2.7.0
 flutter_native_splash:
   ios: true
   android: true

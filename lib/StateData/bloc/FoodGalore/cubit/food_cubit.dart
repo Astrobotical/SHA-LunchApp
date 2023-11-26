@@ -46,15 +46,21 @@ class FoodCubit extends Cubit<FoodState> {
   Future<List<dynamic>> getActiveMenu() async {
     return Future.value([]);
   }
-
+  dynamic imageConverter(File file) {
+    List<int> imageBytes = file.readAsBytesSync();
+    String base64Image = base64Encode(imageBytes);
+    return 'data:image/jpeg;base64,$base64Image';
+  }
   Future<void> AddItem(File filePath, String foodName, String category,
       String mealType, String studentType) async {
-    StreamedResponse result = await api.addMenuItem(
-        filePath.path, foodName, category, studentType, mealType);
+    String foodImage = imageConverter(filePath);
+   Response result = await api.addMenuItem(
+        foodImage, "Leafy", category, studentType, mealType);
+   print(result.body);
     if (result.statusCode == 200) {
       emit(FoodAdded());
     } else {
-      print(result.headers.toString());
+      print(result.statusCode);
     }
   }
 

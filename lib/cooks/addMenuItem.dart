@@ -117,7 +117,7 @@ class _AdditemWidgetState extends State<AdditemWidget> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 16),
                           child: TextFormField(
-                            //  controller: _model.passwordController,
+                             controller: Foodname,
                             textCapitalization: TextCapitalization.sentences,
                             //  obscureText: !_model.passwordVisibility,
                             decoration: InputDecoration(

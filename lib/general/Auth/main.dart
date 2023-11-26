@@ -64,6 +64,9 @@ class _MainAuthState extends State<MainAuth> {
                             builder: (context) => promptregister()));
                   });
                 }
+                if(state is RegistrationAccountExists){
+                   _showToast(true,"Account exists");
+                }
                 if(state is RegistrationFailure){
                   return _showToast(true,state.error);
                 }
@@ -115,9 +118,11 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
   late AuthCubit CurrentContext;
 
   ButtonState? changedstate = ButtonState.idle;
-
+  late FToast fToast;
   @override
   void initState() {
+    fToast = FToast();
+    fToast.init(context);
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
 
@@ -518,7 +523,11 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                   if (state.buttonState == ButtonState.loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-
+    if(state is RegistrationAccountExists){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showToast(true, "Account exists");
+    });
+    }
                   return SingleChildScrollView(
                       child: Align(
                           alignment: AlignmentDirectional(0.00, -1.00),
@@ -819,5 +828,32 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
           }),
     ]));
   }
-
+  _showToast(bool iserror,String message) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: iserror ? Colors.red : Colors.green,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            iserror ? Icons.error_outline:Icons.check,
+          ),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text(message),
+        ],
+      ),
+    );
+    setState(() {
+      fToast.showToast(
+        child: toast,
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: Duration(seconds: 4),
+      );
+    });
+  }
 }

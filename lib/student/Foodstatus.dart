@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../general/Parent.dart';
-
+import 'package:lottie/lottie.dart';
 class FoodStatus extends StatefulWidget {
   const FoodStatus({super.key});
 
@@ -13,6 +14,7 @@ class _FoodStatusState extends State<FoodStatus> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      backgroundColor: Colors.blue,
         appBar: AppBar(
           backgroundColor: Colors.blue,
           automaticallyImplyLeading: false,
@@ -31,12 +33,61 @@ class _FoodStatusState extends State<FoodStatus> {
                   ),
                   ),
                   actions: [],
-                  centerTitle: true,
+          title: Text(
+            'Menu Status',
+            style: TextStyle(
+              fontFamily: 'Plus Jakarta Sans',
+              color: Colors.white,
+              fontSize: 25,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          centerTitle: true,
                   elevation: 0,
                   ),
         body:SingleChildScrollView(
           child:Column(
-            children: []
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 400,
+                width: MediaQuery.sizeOf(context).width,
+                child: Lottie.asset('assets/logos/breakfastanimation.json'),
+                ),
+              Gap(20),
+              Align(
+                alignment: Alignment.center,
+                child:
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child:
+              Text(
+                "Food Status",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                )
+              )
+              ),
+              ),
+              Gap(20),
+              Container(
+                margin: EdgeInsets.only(left: 40),
+                child:
+                  Text("Menu Type : Breakfast",
+                  style:TextStyle(fontSize: 22,color:Colors.white)
+                  )
+              ),
+              Gap(20),
+              Container(
+                  margin: EdgeInsets.only(left: 40),
+                  child: Text("Order Details", style: TextStyle(fontSize:22,color:Colors.white)
+                )
+              ),
+              Gap(10),
+            ]
             )
             
           )
