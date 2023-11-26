@@ -74,19 +74,32 @@ class _FoodStatusState extends State<FoodStatus> {
               ),
               Gap(20),
               Container(
+                  alignment: Alignment.center,
+                  child: Text("Order Details", style: TextStyle(fontSize:22,color:Colors.white)
+                  )
+              ),
+              Gap(30),
+              Container(
                 margin: EdgeInsets.only(left: 40),
                 child:
                   Text("Menu Type : Breakfast",
                   style:TextStyle(fontSize: 22,color:Colors.white)
                   )
               ),
-              Gap(20),
-              Container(
-                  margin: EdgeInsets.only(left: 40),
-                  child: Text("Order Details", style: TextStyle(fontSize:22,color:Colors.white)
-                )
-              ),
               Gap(10),
+              Container(
+                margin: EdgeInsets.only(left: 40) ,
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                  [
+                    Text('Food - Eggs and Bread',style: TextStyle(fontSize: 22,color:Colors.white)),
+                    Gap(10),
+                    Text('Side - Fried Dumpling',style: TextStyle(fontSize: 22,color:Colors.white))
+                  ],
+                ),
+              )
             ]
             )
             
