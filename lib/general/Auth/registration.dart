@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hla/StateData/bloc/Authentication/registration_cubit.dart';
+import 'package:hla/general/Auth/main.dart';
 import 'package:hla/general/Parent.dart';
 
 class promptregister extends StatefulWidget {
@@ -51,7 +52,9 @@ class _promptregisterState extends State<promptregister> {
   Widget build(BuildContext context) {
     bool passwordvisibility = true;
     final registorObject = context.read<RegistrationCubit>();
-    return Scaffold(
+    return
+
+      Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -76,27 +79,29 @@ class _promptregisterState extends State<promptregister> {
           ),
           centerTitle: true,
         ),
-        body: BlocBuilder<RegistrationCubit, RegistrationState>(
-            builder: (context, state) {
+        body:
+        BlocConsumer<RegistrationCubit, RegistrationState>(
+          listener : (context, state){
+            if(state is RegistrationSuccess){
+              _showToast(true, "Registration Successful");
+              WidgetsBinding.instance.addPostFrameCallback((_) =>
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainAuth()))
+            );
+
+          }
+          },
+            builder: (context,state){
           if (state is RegistrationLoading) {
             return const Center(child: CircularProgressIndicator());
-          }
-          if(state is RegistrationFailure){
+          }else if(state is RegistrationFailure){
             WidgetsBinding.instance.addPostFrameCallback((_) =>
                _showToast(true, state.error)
             );
           }
-          if(state is RegistrationSuccess) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _showToast(false, 'The registration was successful');
 
-            });
-            Future.delayed(Duration(seconds: 3), () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Parent()));
-            }
-            );
-          }
           return SingleChildScrollView(
             child: Align(
               alignment: AlignmentDirectional(0.00, 0.00),

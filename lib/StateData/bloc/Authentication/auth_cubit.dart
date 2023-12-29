@@ -30,6 +30,7 @@ class AuthCubit extends Cubit<AuthState> {
   GoogleSignInAccount get user => CurrentGoogleUser!;
   TextEditingController EmailBox = TextEditingController();
   TextEditingController Password = TextEditingController();
+
   Future<void> userApiRegister() async{
     emit(AuthLoading(ButtionState: ButtonState.loading, AuthType: "null"));
     AuthType = "Api";
@@ -51,7 +52,9 @@ class AuthCubit extends Cubit<AuthState> {
           Email: Data['Email']);
     }
   }
-
+  void Refresh(){
+    emit(AuthRefreshState(ButtionState: ButtonState.fail, AuthType: "none"));
+  }
   Future<void> userLogin() async {
     if (EmailBox.text.isEmpty) {
       emit(AuthErrorState("The Student ID Box can't be empty"));

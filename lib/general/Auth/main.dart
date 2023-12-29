@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,11 +9,13 @@ import 'package:gap/gap.dart';
 import 'package:hla/StateData/bloc/Authentication/auth_cubit.dart';
 import 'package:hla/StateData/bloc/Authentication/registration_cubit.dart';
 import 'package:hla/general/Auth/authbtn.dart';
+import 'package:hla/general/Auth/forgetpassword/forgetpassword.dart';
 import 'package:hla/general/Auth/login.dart';
 import 'package:hla/general/Auth/registration.dart';
 import 'package:hla/general/Auth/signup.dart';
 import 'package:hla/general/Parent.dart';
 import 'package:hla/general/routes.dart';
+import 'package:hla/general/Auth/registration.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 
@@ -33,50 +34,50 @@ class _MainAuthState extends State<MainAuth> {
     fToast.init(context);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: RoutesGenerator,
-        home:Overlay(
-        initialEntries : [
-          OverlayEntry(builder: (context)
-        {
-          return
-        MultiBlocListener(listeners: [
-          BlocListener<AuthCubit, AuthState>(
-            listener: (context, state) {
-              if (state is AuthSuccessState) {
-               // Navigator.pushReplacementNamed(context,'/');
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Parent()));
-                });
-              }
-            },
-          ),
-          BlocListener<RegistrationCubit, RegistrationState>(
-              listener: (context,state) {
-                if (state is RegistrationContinue) {
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: RoutesGenerator,
+      home: Overlay(initialEntries: [
+        OverlayEntry(builder: (context) {
+          return MultiBlocListener(listeners: [
+            BlocListener<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthSuccessState) {
+                  // Navigator.pushReplacementNamed(context,'/');
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.push(context,
-                        MaterialPageRoute(
-                            builder: (context) => promptregister()));
+                        MaterialPageRoute(builder: (context) => Parent()));
                   });
                 }
-                if(state is RegistrationAccountExists){
-                   _showToast(true,"Account exists");
-                }
-                if(state is RegistrationFailure){
-                  return _showToast(true,state.error);
-                }
+              },
+            ),
+            BlocListener<RegistrationCubit, RegistrationState>(
+                listener: (context, state) {
+              if (state is RegistrationContinue) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => promptregister()));
+                });
               }
-          ),
-        ], child: Scaffold(body: TabArea()));})]
-    ),
+              if (state is RegistrationAccountExists) {
+                _showToast(true, "Account exists");
+              }
+              if (state is RegistrationFailure) {
+                return _showToast(true, state.error);
+              }
+            }),
+          ], child: Scaffold(body: TabArea()));
+        })
+      ]),
     );
   }
-  _showToast(bool iserror,String message) {
+
+  _showToast(bool iserror, String message) {
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
       decoration: BoxDecoration(
@@ -87,7 +88,7 @@ class _MainAuthState extends State<MainAuth> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            iserror ? Icons.error_outline:Icons.check,
+            iserror ? Icons.error_outline : Icons.check,
           ),
           SizedBox(
             width: 12.0,
@@ -175,17 +176,16 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
         children: <Widget>[
           Card(
               margin: EdgeInsets.all(16.0),
-              child: BlocBuilder<AuthCubit, AuthState>(
-                  builder: (context, state) {
+              child:
+                  BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
                 if (state.ButtionState == ButtonState.loading) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (state.ButtionState == ButtonState.success) {
                   Future.delayed(const Duration(seconds: 4));
-                 // _showToast(false, "Login was successful");
+                  // _showToast(false, "Login was successful");
                   // Navigator.pushNamed(context, '/');
                 }
-
                 return SingleChildScrollView(
                     child: Align(
                         alignment: AlignmentDirectional(0.00, -1.00),
@@ -294,8 +294,7 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        8, 0, 8, 16),
+                                    padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 16),
                                     child: TextFormField(
                                       controller: Cubitobj.Password,
                                       textCapitalization:
@@ -348,7 +347,9 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                         ),
                                         filled: true,
                                         fillColor: Color(0xCCFFFFFF),
-                                        suffixIcon: InkWell(
+                                        suffixIcon:
+
+                                        InkWell(
                                             onTap: () {
                                               setState(() {
                                                 if (isVisible) {
@@ -361,17 +362,33 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                             focusNode:
                                                 FocusNode(skipTraversal: true),
                                             child: isVisible
-                                                ? Icon(
+                                                ?
+                                                GestureDetector(
+                                                  onTap: (){
+
+                                                  },
+                                                  child:
+                                            Icon(
                                                     Icons.visibility_outlined,
                                                     color: Color(0xFF57636C),
                                                     size: 20,
                                                   )
-                                                : Icon(
+                                                )
+                                                :
+                                            GestureDetector(
+                                                onTap: (){
+                                                  setState(() {
+                                                    isVisible!;
+                                                  });
+                                                },
+                                                child:
+                                            Icon(
                                                     Icons
                                                         .visibility_off_outlined,
                                                     color: Color(0xFF57636C),
                                                     size: 20,
                                                   )),
+                                        ),
                                       ),
                                       style: const TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
@@ -379,8 +396,10 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
+                                      obscureText: isVisible,
                                     ),
                                   ),
+
                                   BlocBuilder<AuthCubit, AuthState>(
                                       builder: (context, state) {
                                     if (state.ButtionState ==
@@ -499,7 +518,12 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                         ],
                                       ),
                                       InkWell(
-                                          onTap: () {},
+                                          onTap: () {
+                                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => forgetpassword()));
+              });
+                                          },
                                           child: Container(
                                               margin: EdgeInsets.only(top: 10),
                                               child: const Text(
@@ -523,11 +547,19 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                   if (state.buttonState == ButtonState.loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-    if(state is RegistrationAccountExists){
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showToast(true, "Account exists");
-    });
-    }
+                  if (state is RegistrationAccountExists) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _showToast(true, "Account exists");
+                    });
+                  }/*
+                  if(state is RegistrationSuccess)
+                    {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => ));
+                    });
+                    }
+                    */
                   return SingleChildScrollView(
                       child: Align(
                           alignment: AlignmentDirectional(0.00, -1.00),
@@ -573,7 +605,8 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8, 0, 8, 16),
                                       child: TextFormField(
-                                        controller: methodObject.emailController,
+                                        controller:
+                                            methodObject.emailController,
                                         textCapitalization:
                                             TextCapitalization.sentences,
                                         obscureText: false,
@@ -641,7 +674,8 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                       child: TextFormField(
                                         textCapitalization:
                                             TextCapitalization.sentences,
-                                      controller: methodObject.passwordController,
+                                        controller:
+                                            methodObject.passwordController,
                                         decoration: InputDecoration(
                                           labelText: 'Password',
                                           labelStyle: const TextStyle(
@@ -709,45 +743,53 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
-                                         Align(
+                                    Align(
                                         alignment:
                                             AlignmentDirectional(0.00, 0.00),
                                         child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 16),
-                                          child:
-                                          ProgressButton.icon(
-                                          iconedButtons: {
-                                          ButtonState.idle: IconedButton(
-                                          text: "Register",
-                                          icon: Icon(Icons.send,
-                                          color: Colors.white),
-                                          color:
-                                          Colors.deepPurple.shade500),
-                                          ButtonState.loading: IconedButton(
-                                          text: "Loading",
-                                          color:
-                                          Colors.deepPurple.shade700),
-                                          ButtonState.fail: IconedButton(
-                                          text: "Failed",
-                                          icon: Icon(Icons.cancel,
-                                          color: Colors.white),
-                                          color: Colors.red.shade300),
-                                          ButtonState.success: IconedButton(
-                                          text: "",
-                                          icon: Icon(
-                                          Icons.check_circle,
-                                          color: Colors.white,
-                                          ),
-                                          color: Colors.green.shade400)
-                                          },
-                                          onPressed: () async {
-                                          methodObject.canRegister();
-                                          },
-                                          state: state.buttonState)
-                                        )
-                                         ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 0, 16),
+                                            child: ProgressButton.icon(
+                                                iconedButtons: {
+                                                  ButtonState.idle:
+                                                      IconedButton(
+                                                          text: "Register",
+                                                          icon: Icon(Icons.send,
+                                                              color:
+                                                                  Colors.white),
+                                                          color: Colors
+                                                              .deepPurple
+                                                              .shade500),
+                                                  ButtonState.loading:
+                                                      IconedButton(
+                                                          text: "Loading",
+                                                          color: Colors
+                                                              .deepPurple
+                                                              .shade700),
+                                                  ButtonState.fail:
+                                                      IconedButton(
+                                                          text: "Failed",
+                                                          icon: Icon(
+                                                              Icons.cancel,
+                                                              color:
+                                                                  Colors.white),
+                                                          color: Colors
+                                                              .red.shade300),
+                                                  ButtonState.success:
+                                                      IconedButton(
+                                                          text: "",
+                                                          icon: Icon(
+                                                            Icons.check_circle,
+                                                            color: Colors.white,
+                                                          ),
+                                                          color: Colors
+                                                              .green.shade400)
+                                                },
+                                                onPressed: () async {
+                                                  methodObject.canRegister();
+                                                },
+                                                state: state.buttonState))),
                                     Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
@@ -828,7 +870,8 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
           }),
     ]));
   }
-  _showToast(bool iserror,String message) {
+
+  _showToast(bool iserror, String message) {
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
       decoration: BoxDecoration(
@@ -839,7 +882,7 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            iserror ? Icons.error_outline:Icons.check,
+            iserror ? Icons.error_outline : Icons.check,
           ),
           SizedBox(
             width: 12.0,

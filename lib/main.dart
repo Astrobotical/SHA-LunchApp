@@ -27,30 +27,23 @@ import 'package:hla/cooks/invoiceRequestor.dart';
 import 'package:hla/cooks/menuQrCodeGenerator.dart';
 import 'package:hla/StateData/bloc/CubitObserver.dart';
 import 'package:hla/StateData/bloc/parent_cubit.dart';
+import 'package:hla/StateData/bloc/Authentication/cubit/passwordreset_cubit.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context)=> ParentCubit()),
-      BlocProvider<AuthCubit>(
-      create: (context) => AuthCubit()),
-      BlocProvider<SupportCubitCubit>(
-        create: (context)=> SupportCubitCubit()..init()),
-      BlocProvider<FoodCubit>(
-          create: (context)=>FoodCubit()),
-      BlocProvider<CartCubit>(
-            create: (context)=>CartCubit()..startup()),
-      BlocProvider<InvoicesCubit>(
-        create: (context)=>InvoicesCubit()
-      ),
-      BlocProvider<RegistrationCubit>(
-          create: (context)=>RegistrationCubit()
-      ),
-
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (context) => ParentCubit()),
+    BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
+    BlocProvider<SupportCubitCubit>(
+        create: (context) => SupportCubitCubit()..init()),
+    BlocProvider<FoodCubit>(create: (context) => FoodCubit()),
+    BlocProvider<CartCubit>(create: (context) => CartCubit()..startup()),
+    BlocProvider<InvoicesCubit>(create: (context) => InvoicesCubit()),
+    BlocProvider<RegistrationCubit>(create: (context) => RegistrationCubit()),
+    BlocProvider<PasswordresetCubit>(create: (context) => PasswordresetCubit())
   ], child: const MainAuth()));
   Bloc.observer = CubitObserver();
 }

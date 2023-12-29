@@ -47,9 +47,6 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     Response result = await api.userLogin(emailController.text, passwordController.text);
     if (result.statusCode == 200) {
       PreferenceHelper.setAuthType(auth: 'Api');
-      emit(RegistrationSuccess(buttonState: ButtonState.success));
-
-      emit(RegistrationRefresh(buttonState: ButtonState.idle));
       var retrievedJsonrendered = jsonDecode(result.body);
       final Data = retrievedJsonrendered;
       PreferenceHelper.saveCredentials(
@@ -62,7 +59,12 @@ class RegistrationCubit extends Cubit<RegistrationState> {
    registerUser() async{
     Response results = await api.userRegistration(nameController.text, emailController.text, 'Student', studentIDController.text, passwordController.text);
     if(results.statusCode == 200){
+      await userApiLogin();
       emit(RegistrationSuccess(buttonState: ButtonState.success));
+      Future.delayed(Duration(seconds: 3), (){
+        emit(RegistrationRefresh(buttonState: ButtonState.idle));
+      });
+
     }else if(results.statusCode == 401) {
       final parsed = jsonDecode(results.body);
       final Data = parsed['response'];

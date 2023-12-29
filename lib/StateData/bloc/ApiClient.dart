@@ -64,7 +64,28 @@ class ApiClient {
         body: jsonEncode(<String, String>{'token': token}));
     return response;
   }
-
+  Future<Response> resetbyEmail(String email) async{
+    final response = await http.post(
+        Uri.parse("https://api.romarioburke.com/api/v1/verify/verifyEmail"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email
+          }));
+    return response;
+  }
+  Future<Response> resetbyStudentID(String studentID) async{
+    final response = await http.post(
+        Uri.parse("https://api.romarioburke.com/api/v1/verify/verifySTID"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'StudentID': studentID
+          }));
+    return response;
+  }
   Future<Response> getActiveMenu() async {
     final response = await http.get(
       Uri.parse("https://api.romarioburke.com/api/v1/cart/getmenu"),

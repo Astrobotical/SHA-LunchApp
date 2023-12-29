@@ -40,7 +40,8 @@ class _CurrentMenuState extends State<CurrentMenu> {
             margin: const EdgeInsets.only(bottom: 30),
             child: Column(children: [
 
-              BlocBuilder<FoodCubit, FoodState>(builder: (context, state) {
+              BlocBuilder<FoodCubit, FoodState>(
+                builder: (context, state) {
                 if (state is Foodempty) {
                   return Center(
                       child: Text("No Active Menu",
@@ -168,14 +169,20 @@ class _CurrentMenuState extends State<CurrentMenu> {
           String SideName = "";
           String SideFoodImage = "";
           return AlertDialog(
-            backgroundColor: Colors.blueGrey,
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 2,
-              height: double.maxFinite,
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(),
+            content: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
+              ),
+              width: MediaQuery.sizeOf(context).width /1.5,
+              height: MediaQuery.sizeOf(context).height /1.5,
               child: Column(children: [
+                  Gap(10),
                 FittedBox(
                     child: Text("Selected ${foodCategory} item",
-                        style: TextStyle(fontSize: 20, color: Colors.white))),
+                        style: TextStyle(fontSize: 20, color: Colors.black))),
                 Gap(10),
                 Stack(children: [
                   Container(
@@ -203,7 +210,7 @@ class _CurrentMenuState extends State<CurrentMenu> {
                           alignment: Alignment.bottomLeft,
                           child: Container(
                             padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.only(right: 20, bottom: 15),
+                            margin: EdgeInsets.only(left: 20, bottom: 15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25),
                               color: Colors.white,
