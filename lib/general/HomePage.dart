@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         Username = "${presplit![0]} .${presplit[1][0]}";
       }else if(FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty){
         String? Name = FirebaseAuth.instance.currentUser!.displayName;
-        prefs.setString("Name", Name);
+        prefs.setString("Name", Name!);
         raw = Name;
         List<String>? presplit = raw?.split(" ");
         Username = "${presplit![0]} .${presplit[1][0]}";

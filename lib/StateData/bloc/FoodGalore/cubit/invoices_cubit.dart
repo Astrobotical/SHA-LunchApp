@@ -16,7 +16,7 @@ class InvoicesCubit extends Cubit<InvoicesState> {
   Future<List<InvoiceModel>> getInvoices() async {
     final prefs = await SharedPreferences.getInstance();
     String? StudentID = prefs.getString('ID');
-    Response result = await api.getInvoices(StudentID);
+    Response result = await api.getInvoices(StudentID!);
     List data = [];
     if (result.statusCode == 200) {
       final parsed = jsonDecode(result.body);
