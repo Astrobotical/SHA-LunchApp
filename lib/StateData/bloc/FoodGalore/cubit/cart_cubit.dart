@@ -1,7 +1,6 @@
 // ignore_for_file: unused_local_variable
 
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -73,7 +72,7 @@ class CartCubit extends Cubit<CartState> {
     final List<Map<String, Object?>> queryResult = await DBHandle.getCart();
     final List<Map<String, Object?>> data =
         List.generate(queryResult.length, (index) {
-      return <String, dynamic?>{
+      return <String, dynamic>{
         "MainDishID": '${queryResult[index]['FoodID']}',
         "SideDishID": '${queryResult[index]['SideID']}',
         "Category": '${queryResult[index]['FoodCategory']}'

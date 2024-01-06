@@ -121,11 +121,9 @@ class _MenuQrGeneratorState extends State<MenuQrGenerator> {
         try {
           String fileName = DateTime.now().microsecondsSinceEpoch.toString();
           final imagePath = await File('$directory/$fileName.png').create();
-          if (imagePath != null) {
-            await imagePath.writeAsBytes(image);
-          await  Share.shareFiles([imagePath.path]);
-          }
-        } catch (error) {}
+          await imagePath.writeAsBytes(image);
+        await  Share.shareFiles([imagePath.path]);
+                } catch (error) {}
       }
     }).catchError((onError) {
       print('Error --->> $onError');

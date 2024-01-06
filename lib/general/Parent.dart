@@ -51,7 +51,7 @@ class _ParentBodyState extends State<ParentBody> {
     final prefs = await SharedPreferences.getInstance();
     if (FirebaseAuth.instance.currentUser?.displayName != null) {
       String? useremail = FirebaseAuth.instance.currentUser?.email;
-       await methodobj.userChecker(useremail!);
+       await methodobj.userChecker(useremail);
     }
     setState(() {isStudentSetter = prefs.getBool("isStudent")!;});
   }

@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
@@ -329,7 +328,7 @@ class _CurrentMenuState extends State<CurrentMenu> {
                               FoodName: name,
                               FoodImage: image,
                               SideID: SideID,
-                              SideFoodName: SideName!,
+                              SideFoodName: SideName,
                               SideFoodImage: SideFoodImage,
                               FoodCategory:foodCategory );
                           //   Modelobj.FoodID = FoodBloc.Sideitems[index]["ItemName"]

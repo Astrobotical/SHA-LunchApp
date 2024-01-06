@@ -28,13 +28,13 @@ class _HomePageState extends State<HomePage> {
       raw = prefs.getString("Name");
       if (raw != null) {
         List<String>? presplit = raw?.split(" ");
-        Username = "${presplit![0]} .${presplit![1][0]}";
+        Username = "${presplit![0]} .${presplit[1][0]}";
       }else if(FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty){
         String? Name = FirebaseAuth.instance.currentUser!.displayName;
-        prefs.setString("Name", Name!);
-        raw = Name!;
+        prefs.setString("Name", Name);
+        raw = Name;
         List<String>? presplit = raw?.split(" ");
-        Username = "${presplit![0]} .${presplit![1][0]}";
+        Username = "${presplit![0]} .${presplit[1][0]}";
       }/*
       Future.delayed(const Duration(seconds: 1), () async {
         AuthType = await PreferenceHelper.getValueByKey(key: "AuthType");
