@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:firebase_auth/firebase_auth.dart';

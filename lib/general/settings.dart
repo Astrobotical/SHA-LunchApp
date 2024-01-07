@@ -51,7 +51,7 @@ class _SettingsState extends State<Settings> {
         if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
           raw = FirebaseAuth.instance.currentUser!.displayName;
           List<String>? presplit = raw?.split(" ");
-          Username = "${presplit![0]} .${presplit![1][0]}";
+          Username = "${presplit![0]} .${presplit[1][0]}";
         }
         break;
       case "Apple":

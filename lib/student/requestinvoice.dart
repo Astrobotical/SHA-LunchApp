@@ -342,8 +342,7 @@ class _RequestinvoiceState extends State<Requestinvoice> {
 
 class _invoices extends StatelessWidget {
   const _invoices(
-      {super.key,
-      required this.index,
+      {required this.index,
       required this.invoice,
       required this.fToast});
   final InvoiceModel invoice;

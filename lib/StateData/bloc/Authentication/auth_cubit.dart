@@ -106,11 +106,9 @@ class AuthCubit extends Cubit<AuthState> {
     final validateinstance = await SharedPreferences.getInstance();
     String? ID = validateinstance.getString("ID");
     print(ID);
-    if (ID != null) {
-      emit(AuthSuccessState(
-          ButtionState: ButtonState.success, AuthType: "null"));
+    emit(AuthSuccessState(
+        ButtionState: ButtonState.success, AuthType: "null"));
     }
-  }
 
   Future googleLogin() async {
     final googleUser = await googlesignIn.signIn();

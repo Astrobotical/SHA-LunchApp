@@ -378,7 +378,7 @@ class _TabAreaState extends State<TabArea> with TickerProviderStateMixin {
                                             GestureDetector(
                                                 onTap: (){
                                                   setState(() {
-                                                    isVisible!;
+                                                    isVisible;
                                                   });
                                                 },
                                                 child:

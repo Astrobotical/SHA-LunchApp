@@ -13,7 +13,6 @@ import 'package:hla/student/Support.dart';
 import 'firebase_options.dart';
 import 'package:bloc/bloc.dart';
 import 'package:hla/general/foodGalore/mainCatalog.dart';
-import 'dart:math';
 import 'package:slide_switcher/slide_switcher.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -308,7 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-        ) // This trailing comma makes auto-formatting nicer for build methods.
+        ), // This trailing comma makes auto-formatting nicer for build methods.
         );
   }
 }
